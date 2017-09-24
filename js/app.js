@@ -14,7 +14,7 @@
   var item_template = '<div class="restaurant_info">';
   item_template += '<div class="item_content">';
   item_template += '<h3></h3>';
-  item_template += '<h4></h4>';
+  //item_template += '<h4></h4>';
   item_template += '</div>';
   item_template += '</div>';
   item_template += '<div class="item_content">';
@@ -31,22 +31,28 @@
         current_content_hash = data.content_hash;
         $(".container h2 .date").html(data.date + " <small>(" + days[data.day] + " | vecka: " + data.week_number + ")</small>");
 
-        $(".lunch_lista").html("");
+        $(".lunch_list").html("");
         $.each(data.restaurants, function(key, value) {
-          $(".lunch_lista").append('<div class="col-md-12"><div class="restaurant" data-restaurant_id="' + value.id + '"></div></li>');
+          $(".lunch_list").append('<div class="col-md-12"><div class="restaurant" data-restaurant_id="' + value.id + '"></div></li>');
 
-          var list_item = $(".lunch_lista .restaurant[data-restaurant_id='" + value.id + "']");
+          var list_item = $(".lunch_list .restaurant[data-restaurant_id='" + value.id + "']");
           list_item.html(item_template);
 
           if(value.image !== "") {
             list_item.find(".restaurant_info .item_content").addClass("image_title");
-            list_item.find(".restaurant_info h3").html('<img src="' + value.image + '">');
+            if(value.website !== "") list_item.find(".restaurant_info h3").html('<a href="' + value.website + '" target="_blank"><img src="' + value.image + '"></a>');
+            else list_item.find(".restaurant_info h3").html('<img src="' + value.image + '">');
           } else {
-            list_item.find(".restaurant_info h3").html(value.name);
+            if(value.website !== "") list_item.find(".restaurant_info h3").html('<a href="' + value.website + '" target="_blank">' + value.name + '</a>');
+            else list_item.find(".restaurant_info h3").html(value.name);
           }
-          list_item.find(".restaurant_info h4").html(value.address + " | tel. " + value.phone);
+          //list_item.find(".restaurant_info h4").html(value.address + " | tel. " + value.phone);
           list_item.find(".row .restaurant_lunch_info").html('<p><strong>Lunch på ' + value.name + '</strong></p>');
           list_item.find(".row .restaurant_lunch_info").append(value.info);
+          list_item.find(".row .restaurant_lunch_info").append('<div class="restaurant_contact"></div>');
+          list_item.find(".row .restaurant_lunch_info .restaurant_contact").html('<p class="address"><strong>Adress:</strong> <span></span></p><p class="phone"><strong>Telefon:</strong> <span></span></p>');
+          list_item.find(".row .restaurant_lunch_info .restaurant_contact .address span").html(value.address);
+          list_item.find(".row .restaurant_lunch_info .restaurant_contact .phone span").html(value.phone);
           list_item.find(".row .restaurant_lunch").html(value.lunch);
         });
       }

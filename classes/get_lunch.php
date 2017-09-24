@@ -35,7 +35,9 @@ foreach($matches[0] as $key => $value) {
 foreach($filtered_matches as $key => $value) {
   if(preg_match('/(<div class="restaurant_info">)(.*?)(<\/div> <!--\/\.left-->)/mi', $value, $found_match)) {
     if($favorited_obj->restaurants->{$key}) {
-      $favorited_obj->restaurants->{$key}->image = "http://www.aland.com/img/lunchguiden/" . urlencode($key) . ".png";
+      if(empty($favorited_obj->restaurants->{$key}->image) || !file_exists("../" . $favorited_obj->restaurants->{$key}->image)) {
+        $favorited_obj->restaurants->{$key}->image = "http://www.aland.com/img/lunchguiden/" . urlencode($key) . ".png";
+      }
       $favorited_obj->restaurants->{$key}->info = trim(preg_replace('/<img align="right"(.*?)">/i', "", $found_match[2]));
       $favorited_obj->restaurants->{$key}->info = preg_replace('/(\((.*?)\))/i', "<em>" . "$1" . "</em>", $favorited_obj->restaurants->{$key}->info);
     }

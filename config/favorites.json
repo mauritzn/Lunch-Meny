@@ -3,18 +3,24 @@
     "id": 7,
     "name": "Bistro Savoy",
     "address": "Nygatan 12, 22100 Mariehamn",
-    "phone": "01815400"
+    "phone": "01815400",
+    "website": "http://www.alandhotels.fi/sv/mat-dryck/bistro-savoy",
+    "image": "images/restaurants/7.png"
   },
   "11": {
     "id": 11,
     "name": "Time Out",
     "address": "Elverksgatan 10, 22100 Mariehamn",
-    "phone": "01812006"
+    "phone": "01812006",
+    "website": "",
+    "image": "images/restaurants/11.png"
   },
   "49": {
     "id": 49,
     "name": "Iwa Konditori & Café",
     "address": "Torggatan 12, AX-22 100 Mariehamn",
-    "phone": "013446"
+    "phone": "01813446",
+    "website": "http://www.aland.com/se/iwa_konditori_&_cafe/start",
+    "image": "images/restaurants/49.png"
   }
 }
