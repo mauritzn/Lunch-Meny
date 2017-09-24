@@ -1,0 +1,66 @@
+body {
+  font-family: 'Titillium Web', sans-serif;
+}
+
+.container > h2 {
+  margin-bottom: 35px;
+}
+.lunch_lista .restaurant {
+  position: relative;
+  margin-bottom: 35px;
+  background-color: #fff;
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 0px 1px 3px rgba(0,0,0,0.35);
+}
+.lunch_lista .restaurant .item_content {
+  padding: 35px;
+}
+
+.lunch_lista .restaurant_info {
+  position: relative;
+  background-color: #fbfbfb;
+  border-bottom: 1px solid #e5e5e5;
+}
+.lunch_lista .restaurant_info h3 { font-weight: bold; }
+.lunch_lista .restaurant .image_title {
+  padding: 25px 35px !important;
+}
+.lunch_lista .restaurant .image_title img {
+  height: 55px;
+}
+.lunch_lista .restaurant_info h3,
+.lunch_lista .restaurant_info h4 {
+  display: inline-table;
+  vertical-align: middle;
+  margin: 0;
+}
+.lunch_lista .restaurant_info h4 {
+  position: absolute;
+  right: 35px;
+  top: 50%;
+  padding-left: 175px;
+  transform: translateY(-50%);
+}
+
+.lunch_lista .restaurant_lunch_info p:last-of-type {
+  margin-bottom: 0;
+}
+
+.lunch_lista .restaurant_lunch ul:first-of-type {
+  margin-bottom: 25px;
+}
+.lunch_lista .restaurant_lunch ul:last-of-type {
+  margin-bottom: 0 !important;
+}
+.lunch_lista .restaurant_lunch ul li {
+  margin-bottom: 10px;
+}
+
+
+
+@media all and (max-width: 991px) {
+  .lunch_lista .restaurant_lunch_info {
+    margin-bottom: 45px;
+  }
+}

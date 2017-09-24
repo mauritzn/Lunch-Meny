@@ -1,0 +1,20 @@
+{
+  "7": {
+    "id": 7,
+    "name": "Bistro Savoy",
+    "address": "Nygatan 12, 22100 Mariehamn",
+    "phone": "01815400"
+  },
+  "11": {
+    "id": 11,
+    "name": "Time Out",
+    "address": "Elverksgatan 10, 22100 Mariehamn",
+    "phone": "01812006"
+  },
+  "49": {
+    "id": 49,
+    "name": "Iwa Konditori & Café",
+    "address": "Torggatan 12, AX-22 100 Mariehamn",
+    "phone": "013446"
+  }
+}
