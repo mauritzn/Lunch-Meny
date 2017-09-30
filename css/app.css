@@ -5,6 +5,13 @@ body {
 .container > h2 {
   margin-bottom: 35px;
 }
+.lunch_list[data-list="favorites"]:after {
+  content: "";
+  width: 90%;
+  height: 1px;
+  background-color: #e5e5e5;
+  margin: 35px auto;
+}
 .lunch_list .restaurant {
   position: relative;
   margin-bottom: 35px;
@@ -27,7 +34,8 @@ body {
   padding: 25px 35px !important;
 }
 .lunch_list .restaurant .image_title img {
-  height: 55px;
+  max-height: 55px;
+  max-width: 150px;
 }
 .lunch_list .restaurant_info h3,
 .lunch_list .restaurant_info h4 {
@@ -41,6 +49,33 @@ body {
   top: 50%;
   padding-left: 175px;
   transform: translateY(-50%);
+}
+.lunch_list .restaurant_info .restaurant_menu {
+  position: absolute;
+  right: 35px;
+  top: 50%;
+  transform: translateY(-50%); 
+}
+.lunch_list .restaurant_info .restaurant_menu i[data-action] {
+  cursor: pointer;
+  color: #212121;
+  transform: scale(1);
+  -webkit-transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
+  -moz-transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
+  -ms-transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
+  -o-transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
+  transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+.lunch_list .restaurant_info .restaurant_menu i[data-action]:hover {
+  transform: scale(1.2);
+}
+.lunch_list .restaurant_info .restaurant_menu i[data-action]:active {
+  transform: scale(1);
+}
+.lunch_list .restaurant_info .restaurant_menu i[data-action="favorite"]:hover,
+.lunch_list .restaurant_info .restaurant_menu i[data-action="unfavorite"],
+.lunch_list .restaurant_info .restaurant_menu i[data-action="unfavorite"]:hover {
+  color: #E53935 !important;
 }
 
 .lunch_list .restaurant_lunch_info p:last-of-type {

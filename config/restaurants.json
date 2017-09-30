@@ -1,0 +1,162 @@
+{
+  "2": {
+    "id": 2,
+    "name": "Indigo Restaurang & Bar",
+    "address": "Nygatan 1, 22100 Mariehamn",
+    "phone": "01816550",
+    "website": "http://www.indigo.ax",
+    "image": ""
+  },
+  "4": {
+    "id": 4,
+    "name": "Park Restaurang & Bar",
+    "address": "Norra Esplanadgatan 3, 22100 Mariehamn",
+    "phone": "018527555",
+    "website": "http://www.park.ax",
+    "image": ""
+  },
+  "6": {
+    "id": 6,
+    "name": "Restaurang Nautical",
+    "address": "Hamngatan 2, 22100 Mariehamn",
+    "phone": "01819931",
+    "website": "http://www.nautical.ax",
+    "image": ""
+  },
+  "7": {
+    "id": 7,
+    "name": "Bistro Savoy",
+    "address": "Nygatan 12, 22100 Mariehamn",
+    "phone": "01815400",
+    "website": "http://www.alandhotels.fi/sv/mat-dryck/bistro-savoy",
+    "image": "images/restaurants/7.png"
+  },
+  "10": {
+    "id": 10,
+    "name": "Restaurang Arkipelag",
+    "address": "Strandgatan 35, 22100 Mariehamn",
+    "phone": "01824020",
+    "website": "http://www.hotellarkipelag.com",
+    "image": ""
+  },
+  "11": {
+    "id": 11,
+    "name": "Time Out",
+    "address": "Elverksgatan 10, 22100 Mariehamn",
+    "phone": "01812006",
+    "website": "",
+    "image": "images/restaurants/11.png"
+  },
+  "30": {
+    "id": 30,
+    "name": "Hesburger",
+    "address": "Torggatan 13 A, 22100 Mariehamn",
+    "phone": "01814330",
+    "website": "http://www.hesburger.fi",
+    "image": ""
+  },
+  "37": {
+    "id": 37,
+    "name": "Svarta Katten",
+    "address": "Norragatan 15, 22100 Mariehamn",
+    "phone": "01821599",
+    "website": "https://www.svartakatten.ax",
+    "image": ""
+  },
+  "43": {
+    "id": 43,
+    "name": "Röda Korsgården",
+    "address": "Västra Esplanadgatan 5, 22100 Mariehamn",
+    "phone": "01812741",
+    "website": "http://www.aland.com/bjorntjanster",
+    "image": ""
+  },
+  "44": {
+    "id": 44,
+    "name": "LunchLådan på Rönngården",
+    "address": "Pipsvarvargränd 2, 22150 Jomala",
+    "phone": "01832077",
+    "website": "",
+    "image": ""
+  },
+  "45": {
+    "id": 45,
+    "name": "Bistro Koppargrytan",
+    "address": "Sparvägen 1, 22 150 Jomala",
+    "phone": "01831446",
+    "website": "http://www.koppargrytan.ax",
+    "image": ""
+  },
+  "48": {
+    "id": 48,
+    "name": "Delicatessen",
+    "address": "Kofferdrigränd 10, Mariehamn",
+    "phone": "01823077",
+    "website": "http://www.delicatessen.ax",
+    "image": ""
+  },
+  "49": {
+    "id": 49,
+    "name": "Iwa Konditori & Café",
+    "address": "Torggatan 12, AX-22 100 Mariehamn",
+    "phone": "01813446",
+    "website": "http://www.aland.com/se/iwa_konditori_&_cafe/start",
+    "image": "images/restaurants/49.png"
+  },
+  "50": {
+    "id": 50,
+    "name": "GREAT subs & salads",
+    "address": "Torggatan 10, AX-22 100 Mariehamn",
+    "phone": "01816900",
+    "website": "http://www.aland.com/se/great/start",
+    "image": ""
+  },
+  "53": {
+    "id": 53,
+    "name": "Restaurang Sittkoffska Gården",
+    "address": "Torggatan 13, Ax 22 100 Mariehamn",
+    "phone": "1817612",
+    "website": "http://www.aland.com/se/sittkoffska",
+    "image": ""
+  },
+  "54": {
+    "id": 54,
+    "name": "Kvarter 5",
+    "address": "Norragatan 10, 22100 Mariehamn",
+    "phone": "01815555",
+    "website": "http://www.kvarter5.ax",
+    "image": ""
+  },
+  "58": {
+    "id": 58,
+    "name": "Smakbyn",
+    "address": "Slottsvägen 134, 22520 Kastelholm",
+    "phone": "01843666",
+    "website": "http://www.smakbyn.ax",
+    "image": ""
+  },
+  "61": {
+    "id": 61,
+    "name": "Nonna Rina",
+    "address": "Torget, Mariehamn",
+    "phone": "04573451577",
+    "website": "www.facebook.com/nonnarinaax",
+    "image": ""
+  },
+  "62": {
+    "id": 62,
+    "name": "60 North Bar & Cafe",
+    "address": "Flygfältsvägen 67, 22120 Mariehamn",
+    "phone": "0447262000",
+    "website": "www.60north.fi",
+    "image": ""
+  },
+  "65": {
+    "id": 65,
+    "name": "Bistro Avenue",
+    "address": "Norra Esplanadgatan 2, Mariehamn",
+    "phone": "01814900",
+    "website": "",
+    "image": ""
+  }
+}

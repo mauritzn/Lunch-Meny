@@ -55,18 +55,13 @@ if($cache_valid) {
   foreach($filtered_matches as $key => $value) {
     if(preg_match('/(<div class="restaurant_info">)(.*?)(<\/div> <!--\/\.left-->)/mi', $value, $found_match)) {
       if($restaurants_obj->restaurants->{$key}) {
-        if(!file_exists("images/restaurants/" . $key . ".png")) {
-          if(empty($restaurants_obj->restaurants->{$key}->image) || !file_exists("../" . $restaurants_obj->restaurants->{$key}->image)) {
-            $restaurants_obj->restaurants->{$key}->image = "http://www.aland.com/img/lunchguiden/" . urlencode($key) . ".png";
-            $url_check = getimagesize($restaurants_obj->restaurants->{$key}->image);
-            if(!is_array($url_check)) {
-              $restaurants_obj->restaurants->{$key}->image = "";
-            }
+        if(empty($restaurants_obj->restaurants->{$key}->image) || !file_exists("../" . $restaurants_obj->restaurants->{$key}->image)) {
+          $restaurants_obj->restaurants->{$key}->image = "http://www.aland.com/img/lunchguiden/" . urlencode($key) . ".png";
+          $url_check = getimagesize($restaurants_obj->restaurants->{$key}->image);
+          if(!is_array($url_check)) {
+            $restaurants_obj->restaurants->{$key}->image = "";
           }
-        } else {
-          $restaurants_obj->restaurants->{$key}->image = "images/restaurants/" . $key . ".png";
         }
-        
         $restaurants_obj->restaurants->{$key}->info = trim(preg_replace('/<img align="right"(.*?)">/i', "", $found_match[2]));
         $restaurants_obj->restaurants->{$key}->info = preg_replace('/(\((.*?)\))/i', "<em>" . "$1" . "</em>", $restaurants_obj->restaurants->{$key}->info);
       }

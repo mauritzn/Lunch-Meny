@@ -25,11 +25,11 @@
 <![endif]-->
 
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.css">
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="//fonts.googleapis.com/css?family=Titillium+Web:400,600,700" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="//cdn.mauritzonline.com/bootstrap_custom/style.css">
     
-    <link rel="stylesheet" href="css/app.css?1">
+    <link rel="stylesheet" href="css/app.css?v=0.0.1">
   </head>
 
   <body>
@@ -37,7 +37,9 @@
     <div class="container" style="padding-top: 35px;padding-bottom: 35px;">
       <h2 class="nmt"><strong>Lunch för</strong> <span class="date">00/00/0000</span></h2>
 
-      <div class="row lunch_list"><div class="col-md-12"><p class="nm">laddar...</p></div></div>
+      <div class="row lunch_list" data-list="favorites"><div class="col-md-12"><p class="nm">laddar favoriter...</p></div></div>
+      <div class="row lunch_list" data-list="other"><div class="col-md-12"><p class="nm">laddar andra...</p></div></div>
+      <footer><p class="nm tac"><small>Restaurang &amp; lunch information från <a href="http://www.aland.com/lunch/" target="_blank">http://aland.com/lunch/</a></small></p></footer>
     </div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -46,6 +48,6 @@
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="//cdn.mauritzonline.com/bootstrap_custom/script.js"></script>
     
-    <script type="text/javascript" src="js/app.js?1"></script>
+    <script type="text/javascript" src="js/app.js?v=0.0.1"></script>
   </body>
 </html>
