@@ -88,7 +88,7 @@
       list_item.find(".row .restaurant_lunch_info .restaurant_contact").html('<p class="address"><strong>Adress:</strong> <span></span></p><p class="phone"><strong>Telefon:</strong> <span></span></p>');
       list_item.find(".row .restaurant_lunch_info .restaurant_contact .address span").html(value.address);
       list_item.find(".row .restaurant_lunch_info .restaurant_contact .phone span").html(value.phone);
-      list_item.find(".row .restaurant_lunch").html(value.lunch);
+      list_item.find(".row .restaurant_lunch").html((value.lunch ? value.lunch : '<p><em>(Ingen lunch meny ännu)</em></p>'));
     });
   }
 
