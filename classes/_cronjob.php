@@ -73,9 +73,21 @@ foreach($filtered_matches as $key => $value) {
       $restaurants_obj->restaurants->{$key}->lunch = preg_replace('/<ul><li>STÅENDE MENY<\/li>/i', '<p><b>Stående meny</b></p><ul>', $restaurants_obj->restaurants->{$key}->lunch);
       $restaurants_obj->restaurants->{$key}->lunch = preg_replace('/<li>VECKANS MENY<\/li>/i', '</ul><p><b>Veckans meny</b></p><ul>', $restaurants_obj->restaurants->{$key}->lunch);
       $restaurants_obj->restaurants->{$key}->lunch = preg_replace('/(\((.*?)\))/i', "<em>" . "$1" . "</em>", $restaurants_obj->restaurants->{$key}->lunch);
+
+      $restaurants_obj->restaurants->{$key}->lunch = preg_replace("/<b>/i", "<strong>", $restaurants_obj->restaurants->{$key}->lunch);
+      $restaurants_obj->restaurants->{$key}->lunch = preg_replace("/<\/b>/i", "</strong>", $restaurants_obj->restaurants->{$key}->lunch);
     }
   }
 }
+
+foreach($restaurants_obj->restaurants as $key => $value) {
+  if(empty($value->image)) {
+    if(file_exists(ROOT_FOLDER . "images/restaurants/" . $value->id . ".png")) {
+      $restaurants_obj->restaurants->{$key}->image = "images/restaurants/" . $value->id . ".png";
+    }
+  }
+}
+
 
 $json_encoded = json_encode($restaurants_obj);
 $hash_value = hash("sha512", $json_encoded);
