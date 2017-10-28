@@ -15,7 +15,7 @@
     <meta name="theme-color" content="#244b8b">
 
     <!-- Webbsida av Mauritz Nilsson (http://mauritznilsson.com/) -->
-    
+
     <!-- Bootstrap -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
@@ -30,14 +30,22 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="//fonts.googleapis.com/css?family=Titillium+Web:400,600,700" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="//cdn.mauritzonline.com/bootstrap_custom/style.css">
-    
-    <link rel="stylesheet" href="css/app.css?v=0.0.2">
+
+    <link rel="stylesheet" href="css/app.css?v=0.0.3">
   </head>
 
   <body>
 
     <div class="container" style="padding-top: 35px;padding-bottom: 35px;">
-      <h2 class="nmt"><strong>Lunch för</strong> <span class="date">00/00/0000</span></h2>
+      <div class="row">
+        <div class="col-md-8">
+          <h2 class="nm"><strong>Lunch för</strong> <span class="date">00/00/0000</span></h2>
+        </div>
+
+        <div class="col-md-4 tar">
+          <!-- <div class="app_status"></div> -->
+        </div>
+      </div>
 
       <div class="row lunch_list" data-list="favorites"><div class="col-md-12"><p class="nm">laddar favoriter...</p></div></div>
       <div class="row lunch_list" data-list="other"><div class="col-md-12"><p class="nm">laddar andra...</p></div></div>
@@ -52,7 +60,7 @@
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="//cdn.mauritzonline.com/bootstrap_custom/script.js"></script>
-    
-    <script type="text/javascript" src="js/app.js?v=0.0.2"></script>
+
+    <script type="text/javascript" src="js/app.js?v=0.0.3"></script>
   </body>
 </html>

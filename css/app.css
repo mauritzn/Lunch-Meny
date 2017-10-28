@@ -2,9 +2,21 @@ body {
   font-family: 'Titillium Web', sans-serif;
 }
 
-.container > h2 {
-  margin-bottom: 35px;
+.container > .row:first-of-type { margin-bottom: 35px; }
+.container > .row .col-md-8,
+.container > .row .col-md-4 {
+  position: relative;
+  min-height: 33px;
 }
+
+.container > .row .app_status {
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+}
+
+
 .lunch_list[data-list="favorites"]:after {
   content: "";
   width: 90%;
@@ -20,9 +32,7 @@ body {
   overflow: hidden;
   box-shadow: 0px 1px 3px rgba(0,0,0,0.35);
 }
-.lunch_list .restaurant .item_content {
-  padding: 35px;
-}
+.lunch_list .restaurant .item_content { padding: 35px; }
 
 .lunch_list .restaurant_info {
   position: relative;
@@ -60,6 +70,7 @@ body {
   cursor: pointer;
   color: #212121;
   transform: scale(1);
+
   -webkit-transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
   -moz-transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
   -ms-transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
