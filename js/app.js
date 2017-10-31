@@ -53,7 +53,7 @@
     $(".lunch_list").html("");
     if(favorites.length <= 0) $(".lunch_list[data-list='favorites']").hide();
     else $(".lunch_list[data-list='favorites']").show();
-    
+
     $.each(content.restaurants, function(key, value) {
       var item_template_copy = item_template;
       var lunch_list = ".lunch_list[data-list='other']";
@@ -81,6 +81,7 @@
         if(value.website !== "") list_item.find(".restaurant_info h3").html('<a href="' + value.website + '" target="_blank">' + value.name + '</a>');
         else list_item.find(".restaurant_info h3").html(value.name);
       }
+      
       //list_item.find(".restaurant_info h4").html(value.address + " | tel. " + value.phone);
       list_item.find(".row .restaurant_lunch_info").html('<p><strong>Lunch på ' + value.name + '</strong></p>');
       list_item.find(".row .restaurant_lunch_info").append(value.info);
@@ -89,6 +90,7 @@
       list_item.find(".row .restaurant_lunch_info .restaurant_contact .address span").html(value.address);
       list_item.find(".row .restaurant_lunch_info .restaurant_contact .phone span").html(value.phone);
       list_item.find(".row .restaurant_lunch").html((value.lunch ? value.lunch : '<p><em>(Ingen lunch meny ännu)</em></p>'));
+      list_item.attr("data-has_lunch", (value.lunch ? "true" : "false"));
     });
   }
 
