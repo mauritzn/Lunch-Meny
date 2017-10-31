@@ -1,7 +1,7 @@
 <?php
 
 date_default_timezone_set("Europe/Helsinki");
-define("ROOT_FOLDER", "/kunden/homepages/13/d519155198/htdocs/mauritz/_subdomains/webpad/user/824385376285/lunch/");
+define("ROOT_FOLDER", "/kunden/homepages/13/d519155198/htdocs/mauritz/_subdomains/lunch/");
 
 $cache_valid = false;
 if(file_exists(ROOT_FOLDER . "cache.json")) {
