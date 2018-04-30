@@ -3,6 +3,17 @@
 date_default_timezone_set("Europe/Helsinki");
 define("ROOT_FOLDER", "/kunden/homepages/13/d519155198/htdocs/mauritz/_subdomains/lunch/");
 
+$swedish_day_name = (object) array(
+  "monday" => "måndag",
+  "tuesday" => "tisdag",
+  "wednesday" => "onsdag",
+  "thursday" => "torsdag",
+  "friday" => "fredag",
+  "saturday" => "lördag",
+  "sunday" => "söndag"
+);
+
+
 $cache_valid = false;
 if(file_exists(ROOT_FOLDER . "cache.json")) {
   if($cache_contents = file_get_contents(ROOT_FOLDER . "cache.json")) {
@@ -33,7 +44,7 @@ preg_match('/<b>Dagens lunch ([0-9]{1,}\.[0-9]{1,}\.[0-9]{4})<\/b>/mi', $content
 $restaurants_obj->date = $found_dates[1];
 $restaurants_obj->timestap = strtotime($restaurants_obj->date);
 //$restaurants_obj->date = str_replace(".", "/", $restaurants_obj->date);
-$restaurants_obj->day = strtolower(date("l", $restaurants_obj->timestap));
+$restaurants_obj->day = $swedish_day_name->{strtolower(date("l", $restaurants_obj->timestap))};
 $restaurants_obj->week_number = date("W", $restaurants_obj->timestap);
 
 $matches_found = preg_match_all('/(<div id="restaurant_[0-9]*" class="restaurant">)(.*?)(<!--\/\.ui-accordion-content--><\/div>)/mi', $contents, $matches);

@@ -26,43 +26,57 @@
 <script src="//oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="//fonts.googleapis.com/css?family=Titillium+Web:400,600,700" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="//cdn.mauritzonline.com/bootstrap_custom/style.css">
+    <link href="https://cdn.mauritzonline.com/bootstrap_custom/style.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/app.css?v=0.0.3">
-
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-37237418-9"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'UA-37237418-9');
-    </script>
+    <link href="css/app.css" rel="stylesheet">
   </head>
 
   <body>
 
-    <div class="container" style="padding-top: 35px;padding-bottom: 35px;">
-      <div class="row">
-        <div class="col-md-8">
-          <h2 class="nm"><strong>Lunch för</strong> <span class="date">00/00/0000</span></h2>
+    <div id="app">
+      <div class="container" style="padding-top: 35px;padding-bottom: 35px;">
+        <div class="row">
+          <div class="col-md-8">
+            <h2 class="nm">
+              <strong>Lunch för</strong>
+
+              <span class="date">
+                {{ date }} <small>({{ day }} | vecka: {{ week_number }})</small>
+              </span>
+            </h2>
+          </div>
+
+          <div class="col-md-4 tar">
+            <!-- <div class="app_status"></div> -->
+          </div>
         </div>
 
-        <div class="col-md-4 tar">
-          <!-- <div class="app_status"></div> -->
+
+        <div class="row lunch_list" data-list="favorites" v-if="favorites.length > 0">
+          <restaurant v-for="r in restaurants"
+                      v-bind:r="r"
+                      v-bind:action="'unfavorite'"
+                      v-bind:fav_icon="'favorite'"
+                      v-if="app.favorites.indexOf(r.id) !== -1"></restaurant>
         </div>
+
+        <div class="row lunch_list" data-list="other" v-if="Object.keys(restaurants).length > 0">
+          <restaurant v-for="r in restaurants"
+                      v-bind:r="r"
+                      v-bind:action="'favorite'"
+                      v-bind:fav_icon="'favorite_border'"
+                      v-if="app.favorites.indexOf(r.id) === -1"></restaurant>
+        </div>
+
+
+        <footer>
+          <p class="nm tac"><small>Restaurang &amp; lunch information från <a href="http://www.aland.com/lunch/" target="_blank">http://aland.com/lunch/</a></small></p>
+          <p class="nm tac"><small><strong>Källkod:</strong> <a href="https://github.com/mauritzn/Lunch-Meny" target="_blank">GitHub</a></small></p>
+        </footer>
       </div>
-
-      <div class="row lunch_list" data-list="favorites"><div class="col-md-12"><p class="nm">laddar favoriter...</p></div></div>
-      <div class="row lunch_list" data-list="other"><div class="col-md-12"><p class="nm">laddar andra...</p></div></div>
-      <footer>
-        <p class="nm tac"><small>Restaurang &amp; lunch information från <a href="http://www.aland.com/lunch/" target="_blank">http://aland.com/lunch/</a></small></p>
-        <p class="nm tac"><small><strong>Källkod:</strong> <a href="https://github.com/mauritzn/Lunch-Meny" target="_blank">GitHub</a></small></p>
-      </footer>
     </div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -70,7 +84,9 @@
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="//cdn.mauritzonline.com/bootstrap_custom/script.js"></script>
+    <script src="https://cdn.mauritzonline.com/bootstrap_custom/script.js" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 
-    <script type="text/javascript" src="js/app.js?v=0.0.3"></script>
+    <script src="js/app.js" type="text/javascript"></script>
   </body>
 </html>

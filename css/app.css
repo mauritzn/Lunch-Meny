@@ -99,9 +99,9 @@ body {
   color: #E53935 !important;
 }
 
-.lunch_list .restaurant_lunch_info p:last-of-type {
+/*.lunch_list .restaurant_lunch_info p:last-of-type {
   margin-bottom: 0;
-}
+}*/
 .lunch_list .restaurant_lunch_info .restaurant_contact {
   margin-top: 25px;
 }

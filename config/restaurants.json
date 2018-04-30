@@ -47,14 +47,6 @@
     "website": "",
     "image": "images/restaurants/11.png"
   },
-  "30": {
-    "id": 30,
-    "name": "Hesburger",
-    "address": "Torggatan 13 A, 22100 Mariehamn",
-    "phone": "01814330",
-    "website": "http://www.hesburger.fi",
-    "image": ""
-  },
   "37": {
     "id": 37,
     "name": "Svarta Katten",
@@ -69,22 +61,6 @@
     "address": "Västra Esplanadgatan 5, 22100 Mariehamn",
     "phone": "01812741",
     "website": "http://www.aland.com/bjorntjanster",
-    "image": ""
-  },
-  "44": {
-    "id": 44,
-    "name": "LunchLådan på Rönngården",
-    "address": "Pipsvarvargränd 2, 22150 Jomala",
-    "phone": "01832077",
-    "website": "",
-    "image": ""
-  },
-  "45": {
-    "id": 45,
-    "name": "Bistro Koppargrytan",
-    "address": "Sparvägen 1, 22 150 Jomala",
-    "phone": "01831446",
-    "website": "http://www.koppargrytan.ax",
     "image": ""
   },
   "48": {
@@ -103,14 +79,6 @@
     "website": "http://www.aland.com/se/iwa_konditori_&_cafe/start",
     "image": "images/restaurants/49.png"
   },
-  "50": {
-    "id": 50,
-    "name": "GREAT subs & salads",
-    "address": "Torggatan 10, AX-22 100 Mariehamn",
-    "phone": "01816900",
-    "website": "http://www.aland.com/se/great/start",
-    "image": ""
-  },
   "53": {
     "id": 53,
     "name": "Restaurang Sittkoffska Gården",
@@ -125,14 +93,6 @@
     "address": "Norragatan 10, 22100 Mariehamn",
     "phone": "01815555",
     "website": "http://www.kvarter5.ax",
-    "image": ""
-  },
-  "58": {
-    "id": 58,
-    "name": "Smakbyn",
-    "address": "Slottsvägen 134, 22520 Kastelholm",
-    "phone": "01843666",
-    "website": "http://www.smakbyn.ax",
     "image": ""
   },
   "61": {
