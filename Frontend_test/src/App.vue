@@ -5,26 +5,23 @@
         <strong>Lunch för</strong>
         <span>
           {{ date }}
-          <small>({{ weekDay | translateDay }} | vecka: {{ weekNumber }})</small>
+          <small>({{ weekDay }} | vecka: {{ weekNumber }})</small>
         </span>
       </h1>
 
-      <p v-if="loading">Laddar...</p>
-      <div v-else>
-        <restaurant-card
-          v-for="restaurant in favoritedRestaurants"
-          :key="restaurant.id"
-          :restaurant="restaurant"
-        ></restaurant-card>
+      <restaurant-card
+        v-for="restaurant in favoritedRestaurants"
+        :key="restaurant.id"
+        :restaurant="restaurant"
+      ></restaurant-card>
 
-        <hr v-if="favoritedRestaurants.length > 0 && unfavoritedRestaurants.length > 0">
+      <hr v-if="favoritedRestaurants.length > 0 && unfavoritedRestaurants.length > 0">
 
-        <restaurant-card
-          v-for="restaurant in unfavoritedRestaurants"
-          :key="restaurant.id"
-          :restaurant="restaurant"
-        ></restaurant-card>
-      </div>
+      <restaurant-card
+        v-for="restaurant in unfavoritedRestaurants"
+        :key="restaurant.id"
+        :restaurant="restaurant"
+      ></restaurant-card>
     </div>
   </div>
 </template>
@@ -55,7 +52,6 @@ h1 {
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import axios from "axios";
 import RestaurantCard from "@/components/RestaurantCard.vue";
 
 @Component({
@@ -64,8 +60,6 @@ import RestaurantCard from "@/components/RestaurantCard.vue";
   }
 })
 export default class App extends Vue {
-  loading: boolean = true;
-
   get date() {
     return this.$store.state.date;
   }
@@ -99,35 +93,7 @@ export default class App extends Vue {
     });
   }
   get restaurants() {
-    return this.$store.state.restaurants.filter((restaurant: any) => {
-      if (restaurant.address) {
-        if (new RegExp("\\bMariehamn\\b", "i").test(restaurant.address)) {
-          return true;
-        } else {
-          return false;
-        }
-      } else {
-        return true;
-      }
-    });
-  }
-
-  mounted() {
-    axios({
-      method: "get",
-      url: this.$store.state.apiUrl
-    })
-      .then(res => {
-        this.loading = false;
-
-        if (res.data && res.data.cache) {
-          this.$store.commit("updateCache", res.data.cache);
-        }
-      })
-      .catch(err => {
-        console.warn(err);
-        this.loading = false;
-      });
+    return this.$store.state.restaurants;
   }
 
   /* mounted() {

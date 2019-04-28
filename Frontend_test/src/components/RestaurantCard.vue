@@ -3,8 +3,7 @@
     <div class="restaurantCard__header">
       <a :href="restaurant.website" target="_blank">
         <h3>
-          <img :src="restaurant.image" v-if="restaurant.image">
-          <span v-else>{{ restaurant.name }}</span>
+          <img :src="restaurant.image">
         </h3>
       </a>
 
@@ -41,7 +40,7 @@
       </div>
 
       <div class="restaurantCard__menu">
-        <span v-html="restaurant.menu" v-if="restaurant.menu"></span>
+        <span v-html="restaurant.lunch" v-if="restaurant.lunch"></span>
         <span v-else>
           <p>
             <em>(Ingen lunch meny ännu)</em>
