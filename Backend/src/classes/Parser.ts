@@ -19,7 +19,7 @@ export interface ParseResult {
 export interface Restaurant {
   id: number;
   image: string | null;
-  link: string | null;
+  website: string | null;
   name: string;
   info: string;
   address: string;
@@ -94,7 +94,12 @@ export class Parser {
           const splitInfo = headerInfo.split(", tel. ");
 
           // get resturant website link
-          const link = $(element).find(".ui-accordion-content > a").attr("href") || null;
+          let website = $(element).find(".ui-accordion-content > a").attr("href") || null;
+          if(website) {
+            if(!new RegExp("^[a-z]+:[/]{2}", "i").test(website)) { // make sure an HTTP protocol is defined
+              website = `http://${website}`;
+            }
+          }
 
           // get restaurant image
           const image = $(element).find(".ui-accordion-content .restaurant_info > img").attr("src") || null;
@@ -103,7 +108,7 @@ export class Parser {
           let restaurant: Restaurant = {
             id: parseInt($(element).attr("id").replace(/[^0-9]/gi, "")),
             image: image,
-            link: link,
+            website: website,
             name: ($(element).find(".ui-accordion-header .header_left").text() || "").trim(),
             info: ($(element).find(".ui-accordion-content .restaurant_info").html() || "").trim(),
             address: (splitInfo[0] || "").trim(),

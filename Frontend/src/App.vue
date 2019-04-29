@@ -25,6 +25,22 @@
           :restaurant="restaurant"
         ></restaurant-card>
       </div>
+
+      <footer>
+        <p>
+          Restaurang &amp; lunch information från
+          <a
+            href="http://www.aland.com/lunch/"
+            target="_blank"
+          >http://aland.com/lunch/</a>
+        </p>
+        <p>
+          <strong>Källkod:&nbsp;</strong>
+          <a href="https://github.com/mauritzn/Lunch-Meny/tree/v0.1.0" target="_blank">GitHub</a>
+          |
+          <a href="https://mauritz.cloud/lunch-meny" target="_blank">API</a>
+        </p>
+      </footer>
     </div>
   </div>
 </template>
@@ -49,6 +65,20 @@ h1 {
 
 .restaurantCard:not(:last-child) {
   margin-bottom: 35px;
+}
+
+footer {
+  text-align: center;
+  margin-top: 35px;
+
+  p {
+    margin: 0;
+    font-size: 80%;
+
+    &:not(:last-child) {
+      margin-bottom: 5px;
+    }
+  }
 }
 </style>
 
