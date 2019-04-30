@@ -1,21 +1,25 @@
 # Backend
 
-## Project setup
+Node.js web parser som skaffar lunch information från http://www.aland.com/lunch/ och fixar encodingen till UTF-8 och lagar en mera standard stil på texten. Ger sedan simpel RESTful API access till informationen.
+
+---
+
+## Projekt setup
 ```
 npm install
 ```
 
-### Runs Nodemon for development
+### Kör Nodemon för utveckling
 ```
 npm run dev
 ```
 
-### Compiles and runs for production
+### Kompileras och kör för produktion
 ```
 npm run start
 ```
 
-### Compiles and minifies for production
+### Kompileras och minimerar för produktion
 ```
 npm run build
 ```
