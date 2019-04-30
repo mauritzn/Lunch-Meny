@@ -21,8 +21,8 @@ export interface ParseResult {
 
 export interface Restaurant {
   id: number;
-  image: string | null;
-  website: string | null;
+  image: string;
+  website: string;
   name: string;
   info: string;
   address: string;
@@ -63,8 +63,7 @@ export class Parser {
   }
 
   static parse() {
-    // function to fix aland.com oddities
-    function formatHtml(html: string): string {
+    function formatHtml(html: string): string { // function to fix aland.com oddities
       html = html.replace(new RegExp("<([/]?)b>", "gi"), "<$1strong>"); // convert old b tag to new strong tag
       html = html.replace(new RegExp("<([/]?)i>", "gi"), "<$1em>"); // convert old i tag to new em tag
       html = html.replace(new RegExp("[ ]*<span><[/]span>", "gi"), ""); // remove odd empty spans
@@ -87,15 +86,14 @@ export class Parser {
       };
 
       Parser.fetchRawData().then((data) => {
-        const converted = iconv.decode(data.value, data.charset); // convert to UTF
+        const converted = iconv.decode(data.value, data.charset); // convert aland.com's old ISO-8859-1 charset to UTF
         const $ = cheerio.load(converted, { decodeEntities: false });
         const restaurantsHtml = $("#restaurants").html() || "";
-        const found = restaurantsHtml.match(new RegExp(`<b>Dagens lunch ([0-9]{1,2}.[0-9]{1,2}.[0-9]{4})<[/]b>`, "im"));
-        let currentDate = defaultMoment.format("DD.MM.YYYY");
+        const found = restaurantsHtml.match(new RegExp(`<b>Dagens lunch ([0-9]{1,2}.[0-9]{1,2}.[0-9]{4})<[/]b>`, "im")); // find lunch date on site
 
-        if(found && found.length > 1) {
+        if(found && found.length > 1) { // check if a date was found on the site
           if(new RegExp("^[0-9]{1,2}.[0-9]{1,2}.[0-9]{4}$", "i").test(found[1].trim())) {
-            result.date = found[1].trim();
+            result.date = found[1].trim(); // use found date if it was valid
           }
         }
         let momentDate = moment(result.date, "DD.MM.YYYY");
@@ -105,21 +103,20 @@ export class Parser {
 
         $("#restaurants .restaurant").each((i, element) => {
           // get address and phone number
-          let headerInfo = $(element).find(".ui-accordion-header .header_right").text() || "";
-          headerInfo = headerInfo.replace(/[ ]{2,}/gi, " ");
+          let headerInfo = ($(element).find(".ui-accordion-header .header_right").text() || "").trim();
+          headerInfo = headerInfo.replace(/[ ]{2,}/gi, " "); // remove any potential muli-spaces
           const splitInfo = headerInfo.split(", tel. ");
 
           // get resturant website link
-          let website = $(element).find(".ui-accordion-content > a").attr("href") || null;
+          let website = ($(element).find(".ui-accordion-content > a").attr("href") || "").trim();
           if(website) {
             if(!new RegExp("^[a-z]+:[/]{2}", "i").test(website)) { // make sure an HTTP protocol is defined
-              website = `http://${website}`;
+              website = `http://${website}`; // if no HTTP protocol is defined, default to http://
             }
           }
 
-          // get restaurant image
-          const image = $(element).find(".ui-accordion-content .restaurant_info > img").attr("src") || null;
-          $(element).find(".ui-accordion-content .restaurant_info > img").remove();
+          const image = ($(element).find(".ui-accordion-content .restaurant_info > img").attr("src") || "").trim(); // get restaurant image
+          $(element).find(".ui-accordion-content .restaurant_info > img").remove(); // remove logo from resturant info
 
           let restaurant: Restaurant = {
             id: parseInt($(element).attr("id").replace(/[^0-9]/gi, "")),
@@ -134,10 +131,13 @@ export class Parser {
 
           if(restaurant.info) {
             restaurant.info = formatHtml(restaurant.info);
-            restaurant.info = Autolinker.link(restaurant.info);
+            restaurant.info = Autolinker.link(restaurant.info); // find links/emails/etc.
           }
           if(restaurant.menu) {
             restaurant.menu = formatHtml(restaurant.menu);
+            restaurant.menu = restaurant.menu.replace(/\n$/i, ""); // remove unwated trailing newline
+
+            // add extra elements, for better style hierarchy
             restaurant.menu = restaurant.menu.replace(new RegExp("<ul><li>STÅENDE MENY<[/]li>", "i"), "<p><strong>Stående meny</strong></p><ul>");
             restaurant.menu = restaurant.menu.replace(new RegExp("<li>VECKANS MENY<[/]li>", "i"), "</ul><p><strong>Veckans meny</strong></p><ul>");
             restaurant.menu = restaurant.menu.replace(new RegExp("<li>Lunchmeny<[/]li>", "i"), "");
@@ -149,13 +149,11 @@ export class Parser {
             });
           }
 
-          // if a phone number exists convert it to a consistent local format
-          if(restaurant.phone) {
+          if(restaurant.phone) { // if a phone number exists convert it to a consistent local format
             const number = phoneUtil.parseAndKeepRawInput(restaurant.phone, "FI");
             restaurant.phone = phoneUtil.format(number, PhoneNumberFormat.NATIONAL);
           }
 
-          restaurant.menu = restaurant.menu.replace(/\n$/i, "");
           result.restaurants.push(restaurant);
         });
 
