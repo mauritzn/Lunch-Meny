@@ -39,6 +39,11 @@ export class Functions {
     }
   }
 
+
+  static capitalizeFirstLetter(text: string): string {
+    return text.charAt(0).toUpperCase() + text.slice(1);
+  }
+
   static cleanString(text: string): string { // trim string and check that it exists
     return (text ? text.trim() : "");
   }

@@ -1,7 +1,10 @@
 <template>
   <div id="app">
     <div class="container">
-      <h1>
+      <h1 v-if="loading || errored">
+        <strong>Lunch Meny</strong>
+      </h1>
+      <h1 v-else>
         <strong>Lunch för</strong>
         <span>
           {{ date }}
@@ -10,6 +13,7 @@
       </h1>
 
       <p v-if="loading">Laddar...</p>
+      <p v-else-if="!loading && errored">Något gick fel! Vänligen försök igen senare</p>
       <div v-else>
         <restaurant-card
           v-for="restaurant in favoritedRestaurants"
@@ -95,6 +99,7 @@ import RestaurantCard from "@/components/RestaurantCard.vue";
 })
 export default class App extends Vue {
   loading: boolean = true;
+  errored: boolean = false;
 
   get date() {
     return this.$store.state.date;
@@ -157,6 +162,7 @@ export default class App extends Vue {
       .catch(err => {
         console.warn(err);
         this.loading = false;
+        this.errored = true;
       });
   }
 

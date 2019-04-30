@@ -76,10 +76,13 @@ p {
 }
 
 a, a:visited {
-  color: #337ab7;
+  color: #00796B;
   text-decoration: none;
+  border: none;
+  border-bottom: 1px solid rgba(#00796B, 0);
+  transition: color 0.25s ease-in-out, border-color 0.25s ease-in-out;
 }
 a:hover {
-  color: #23527c;
-  text-decoration: underline;
+  color: #26A69A;
+  border-color: rgba(#26A69A, 1);
 }

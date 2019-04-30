@@ -136,11 +136,26 @@
       margin: 0;
 
       &:not(:last-child) {
-        margin-bottom: 25px;
+        margin-bottom: 35px;
       }
 
       li:not(:last-child) {
         margin-bottom: 15px;
+      }
+
+      .list__title {
+        position: relative;
+        left: -15px;
+        font-size: 1.6rem;
+        font-weight: 700;
+        list-style: none;
+        margin-bottom: 10px !important;
+        color: #009688;
+        //opacity: 0.75;
+
+        &:not(:first-child) {
+          margin-top: 25px;
+        }
       }
     }
   }

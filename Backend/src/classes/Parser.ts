@@ -1,8 +1,11 @@
 import * as cheerio from "cheerio";
-import * as encoding from "encoding";
 import * as moment from "moment-timezone";
+import * as iconv from "iconv-lite";
 import axios from "axios";
+import Autolinker from "autolinker";
+import { PhoneNumberFormat, PhoneNumberUtil } from "google-libphonenumber";
 import MAIN_CONFIG from "../config/Main";
+import { Functions as Funcs } from "../classes/Functions";
 
 moment.tz.setDefault(MAIN_CONFIG.defaultTimezone);
 moment.locale("sv");
@@ -29,7 +32,7 @@ export interface Restaurant {
 
 export class Parser {
   static fetchRawData() {
-    return new Promise((resolve: (value: { charset: string, value: string }) => void, reject) => {
+    return new Promise((resolve: (value: { charset: string, value: Buffer }) => void, reject) => {
       axios({
         method: "get",
         url: `https://www.aland.com/lunch/`,
@@ -49,7 +52,7 @@ export class Parser {
         } else {
           resolve({
             charset: charset,
-            value: ""
+            value: new Buffer("")
           });
         }
       }).catch((err) => {
@@ -60,8 +63,21 @@ export class Parser {
   }
 
   static parse() {
+    // function to fix aland.com oddities
+    function formatHtml(html: string): string {
+      html = html.replace(new RegExp("<([/]?)b>", "gi"), "<$1strong>"); // convert old b tag to new strong tag
+      html = html.replace(new RegExp("<([/]?)i>", "gi"), "<$1em>"); // convert old i tag to new em tag
+      html = html.replace(new RegExp("[ ]*<span><[/]span>", "gi"), ""); // remove odd empty spans
+      html = html.replace(new RegExp("[€]", "gi"), "€"); // fix oddly encoded euro signs
+
+      html = html.replace(new RegExp("[(](.*?)[)]", "gi"), "<em>($1)</em>"); // make all text inside parentheses italic
+      return html;
+    }
+
     return new Promise((resolve: (value: ParseResult) => void, reject) => {
-      let defaultMoment = moment();
+      const phoneUtil = new PhoneNumberUtil();
+      const defaultMoment = moment();
+
       let result: ParseResult = {
         day: defaultMoment.format("dddd"),
         weekNumber: defaultMoment.week(),
@@ -71,8 +87,8 @@ export class Parser {
       };
 
       Parser.fetchRawData().then((data) => {
-        const converted = encoding.convert(data.value, "UTF-8", data.charset);
-        const $ = cheerio.load(converted.toString("utf8"));
+        const converted = iconv.decode(data.value, data.charset); // convert to UTF
+        const $ = cheerio.load(converted, { decodeEntities: false });
         const restaurantsHtml = $("#restaurants").html() || "";
         const found = restaurantsHtml.match(new RegExp(`<b>Dagens lunch ([0-9]{1,2}.[0-9]{1,2}.[0-9]{4})<[/]b>`, "im"));
         let currentDate = defaultMoment.format("DD.MM.YYYY");
@@ -115,6 +131,29 @@ export class Parser {
             phone: (splitInfo[1] || "").trim(),
             menu: ($(element).find(".ui-accordion-content .restaurant_menu").html() || "").trim()
           };
+
+          if(restaurant.info) {
+            restaurant.info = formatHtml(restaurant.info);
+            restaurant.info = Autolinker.link(restaurant.info);
+          }
+          if(restaurant.menu) {
+            restaurant.menu = formatHtml(restaurant.menu);
+            restaurant.menu = restaurant.menu.replace(new RegExp("<ul><li>STÅENDE MENY<[/]li>", "i"), "<p><strong>Stående meny</strong></p><ul>");
+            restaurant.menu = restaurant.menu.replace(new RegExp("<li>VECKANS MENY<[/]li>", "i"), "</ul><p><strong>Veckans meny</strong></p><ul>");
+            restaurant.menu = restaurant.menu.replace(new RegExp("<li>Lunchmeny<[/]li>", "i"), "");
+            restaurant.menu = restaurant.menu.replace(new RegExp("<li>((?:Dagens|Veckans|Sallad|Soppa|Vegetarisk).*?)[:;][ ]*", "gi"), "<li><strong>$1:</strong> ");
+
+            const listTitles = ["Förrätter", "Varmrätter", "Desserter", "VECKANS SALLAD", "VECKANS VARMA"];
+            restaurant.menu = restaurant.menu.replace(new RegExp(`<li>(${listTitles.join("|")})<[/]li>`, "gi"), (match, group) => {
+              return `<li class="list__title">${Funcs.capitalizeFirstLetter(group.toLowerCase())}</li>`;
+            });
+          }
+
+          // if a phone number exists convert it to a consistent local format
+          if(restaurant.phone) {
+            const number = phoneUtil.parseAndKeepRawInput(restaurant.phone, "FI");
+            restaurant.phone = phoneUtil.format(number, PhoneNumberFormat.NATIONAL);
+          }
 
           restaurant.menu = restaurant.menu.replace(/\n$/i, "");
           result.restaurants.push(restaurant);
