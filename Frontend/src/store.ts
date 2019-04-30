@@ -36,7 +36,7 @@ export default new Vuex.Store({
     updateCache(state, cache: any) {
       if(cache.date) state.date = cache.date;
       if(cache.day) state.weekDay = cache.day;
-      if(cache.weekNumber) state.weekNumber = cache.weekNumber;
+      if(cache.week_number) state.weekNumber = cache.week_number;
       if(cache.restaurants) state.restaurants = cache.restaurants;
     }
   },

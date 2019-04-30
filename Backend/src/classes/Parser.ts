@@ -13,7 +13,7 @@ moment.locale("sv");
 
 export interface ParseResult {
   day: string;
-  weekNumber: number;
+  week_number: number;
   date: string;
   timestamp: number;
   restaurants: Restaurant[];
@@ -79,7 +79,7 @@ export class Parser {
 
       let result: ParseResult = {
         day: defaultMoment.format("dddd"),
-        weekNumber: defaultMoment.week(),
+        week_number: defaultMoment.week(),
         date: defaultMoment.format("DD.MM.YYYY"),
         timestamp: defaultMoment.unix(),
         restaurants: []
@@ -99,7 +99,7 @@ export class Parser {
         let momentDate = moment(result.date, "DD.MM.YYYY");
         result.timestamp = momentDate.unix();
         result.day = momentDate.format("dddd");
-        result.weekNumber = momentDate.week();
+        result.week_number = momentDate.week();
 
         $("#restaurants .restaurant").each((i, element) => {
           // get address and phone number
