@@ -112,7 +112,7 @@ class App {
         });
       } else {
         let cacheMismatch = false;
-        try { // used to prevent uncaught errors throws from JSON.stringify (if object is invalid)
+        try { // used to prevent uncaught error throws from JSON.stringify (if object is invalid)
           const newHash = Funcs.hash(JSON.stringify(data), "md5");
           const currentHash = Funcs.hash(JSON.stringify(found), "md5");
 

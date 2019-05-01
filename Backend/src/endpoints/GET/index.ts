@@ -32,7 +32,7 @@ export default new Endpoint({
         });
       } else {
         const currentTimestamp = moment(moment().format("DD.MM.YYYY"), "DD.MM.YYYY").unix();
-        cacheDb.findOne({ timestamp: { $gte: currentTimestamp } }, (findErr, found: any) => {
+        cacheDb.findOne({ timestamp: { $gte: currentTimestamp } }, { _id: 0, __v: 0 }, (findErr, found: any) => {
           if(findErr) {
             Funcs.sendJSON(res, {
               status: 500,
@@ -40,16 +40,13 @@ export default new Endpoint({
             });
           } else {
             if(found) {
-              delete found._id;
-              delete found.__v;
-
               Funcs.sendJSON(res, {
                 status: 200,
                 message: `Success!`,
                 cache: found
               });
               requestsDb.insert({
-                endpoint: `/`,
+                endpoint: req.route.path,
                 message: `Client successfully grabbed a copy of cached data`,
                 client: uaParser.getResult(),
                 time: new Date()
@@ -63,7 +60,7 @@ export default new Endpoint({
                 });
 
                 requestsDb.insert({
-                  endpoint: `/`,
+                  endpoint: req.route.path,
                   message: `No cache found, successfully grabbed fresh data from aland.com`,
                   client: uaParser.getResult(),
                   time: new Date()
