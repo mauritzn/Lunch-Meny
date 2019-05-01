@@ -141,9 +141,10 @@ export class Parser {
             restaurant.menu = restaurant.menu.replace(new RegExp("<ul><li>STÅENDE MENY<[/]li>", "i"), "<p><strong>Stående meny</strong></p><ul>");
             restaurant.menu = restaurant.menu.replace(new RegExp("<li>VECKANS MENY<[/]li>", "i"), "</ul><p><strong>Veckans meny</strong></p><ul>");
             restaurant.menu = restaurant.menu.replace(new RegExp("<li>Lunchmeny<[/]li>", "i"), "");
-            restaurant.menu = restaurant.menu.replace(new RegExp("<li>((?:Dagens|Veckans|Sallad|Soppa|Vegetarisk).*?)[:;][ ]*", "gi"), "<li><strong>$1:</strong> ");
 
             const listTitles = ["Förrätter", "Varmrätter", "Desserter", "VECKANS SALLAD", "VECKANS VARMA"];
+            const listSubtitles = ["Dagens", "Veckans", "Sallad", "Soppa", "Vegetarisk"];
+            restaurant.menu = restaurant.menu.replace(new RegExp(`<li>((?:${listSubtitles.join("|")})[^<]{0,})[:;][ ]*`, "gi"), "<li><strong>$1:</strong> ");
             restaurant.menu = restaurant.menu.replace(new RegExp(`<li>(${listTitles.join("|")})<[/]li>`, "gi"), (match, group) => {
               return `<li class="list__title">${Funcs.capitalizeFirstLetter(group.toLowerCase())}</li>`;
             });
