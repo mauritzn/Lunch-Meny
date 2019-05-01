@@ -7,7 +7,7 @@ class Main {
   readonly baseUrl: string = `/`; // use '/' for root url
   readonly defaultTimezone = "Europe/Helsinki";
 
-  readonly cacheCheckInterval = 120; //(5 * 3600); // hours * seconds
+  readonly cacheCheckInterval = (5 * 3600); // hours * seconds
   readonly cacheFile = `${appRoot}/dbs/cache.db`;
   readonly requestsFile = `${appRoot}/dbs/requests.db`; // used for logging requests
 

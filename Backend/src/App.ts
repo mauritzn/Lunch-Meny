@@ -8,6 +8,7 @@ import allEndpoints from "./endpoints/core";
 import MAIN_CONFIG from "./config/Main";
 import { ExpressRequest, ExpressResponse } from "./config/Interfaces";
 import { Parser, ParseResult } from "./classes/Parser";
+import { Functions as Funcs } from "./classes/Functions";
 
 
 class App {
@@ -88,7 +89,7 @@ class App {
     const currentTimestamp = currentMoment.unix();
 
     if((this.lastCacheUpdate + MAIN_CONFIG.cacheCheckInterval) <= currentTimestamp) {
-      console.log(`\nCache updating (${currentMoment.format("HH:mm:ss DD.MM.YYYY")})...`);
+      console.log(`\nChecking cache (${currentMoment.format("HH:mm:ss DD.MM.YYYY")})...`);
       Parser.parse().then((data) => {
         this.lastCacheUpdate = currentTimestamp;
         this.updateCache(data);
@@ -101,8 +102,7 @@ class App {
   }
 
   private updateCache(data: ParseResult): void {
-    // TODO: update cache content if data has changed
-    this.cacheDb.findOne({ date: data.date }, (findErr, found) => {
+    this.cacheDb.findOne({ date: data.date }, { _id: 0, __v: 0 }, (findErr, found) => {
       if(findErr) throw findErr;
 
       if(!found) {
@@ -111,53 +111,35 @@ class App {
           console.log(`Added ${data.date} to cache!`);
         });
       } else {
-        console.log(`Cache already exists for date: ${data.date}!`);
+        let cacheMismatch = false;
+        try { // used to prevent uncaught errors throws from JSON.stringify (if object is invalid)
+          const newHash = Funcs.hash(JSON.stringify(data), "md5");
+          const currentHash = Funcs.hash(JSON.stringify(found), "md5");
+
+          if(newHash !== currentHash) {
+            cacheMismatch = true;
+          }
+        } catch(err) {
+          console.warn(err);
+        }
+
+        if(cacheMismatch) {
+          this.cacheDb.update({ date: data.date }, {
+            $set: data
+          }, { multi: false }, (updateErr) => {
+            if(updateErr) {
+              console.warn(updateErr);
+              console.log(`Failed to update existing cache for date: ${data.date}!`);
+            } else {
+              console.log(`Updated existing cache for date: ${data.date}!`);
+              this.cacheDb.persistence.compactDatafile();
+            }
+          });
+        } else {
+          console.log(`Existing cache already up-to-date (${data.date})!`);
+        }
       }
     });
-
-
-    /* this.cacheDb.remove({}, { multi: true }, (removeErr) => {
-      if(removeErr) throw removeErr;
-
-      this.cacheDb.insert(restaurants, (insertErr) => {
-        if(insertErr) throw insertErr;
-        console.log(`Updated cache, ${restaurants.length} restaurant(s) are now cached!`);
-        this.cacheDb.persistence.compactDatafile();
-      });
-    }); */
-
-    /* const ids = restaurants.map((restaurant) => restaurant.id);
-
-    this.cacheDb.find({
-      id: {
-        $in: ids
-      }
-    }).exec((findErr, found) => {
-      if(findErr) throw findErr;
-
-      const foundIds = found.map((item: any) => item.id);
-      const idsToAdd = ids.filter((id) => {
-        return (foundIds.indexOf(id) < 0 ? true : false);
-      });
-      const idsToUpdate = ids.filter((id) => {
-        return (foundIds.indexOf(id) >= 0 ? true : false);
-      });
-
-      const restaurantsToAdd = restaurants.filter((restaurant) => {
-        return (idsToAdd.indexOf(restaurant.id) >= 0 ? true : false);
-      });
-      const restaurantsToUpdate = restaurants.filter((restaurant) => {
-        return (idsToUpdate.indexOf(restaurant.id) >= 0 ? true : false);
-      });
-
-      this.cacheDb.remove({}, (removeErr) => {
-        if(removeErr) throw removeErr;
-      });
-      this.cacheDb.insert(restaurantsToAdd, (insertErr) => {
-        if(insertErr) throw insertErr;
-        console.log(`Added ${restaurantsToAdd.length} restaurant(s)!`);
-      });
-    }); */
   }
 }
 
