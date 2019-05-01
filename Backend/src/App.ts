@@ -13,18 +13,20 @@ import { Parser, ParseResult } from "./classes/Parser";
 class App {
   public express: any;
   public router: any;
-  public port: number;
-  private lastCacheUpdate: string = ""; // date
+  readonly port: number;
+  readonly baseUrl: string;
+  private lastCacheUpdate: number = -Infinity; // timestamp
   private cacheDb: Nedb;
 
   constructor() {
     this.express = express();
     this.router = express.Router();
     this.port = (process.env.PORT ? parseInt(process.env.PORT) : MAIN_CONFIG.port);
+    this.baseUrl = MAIN_CONFIG.baseUrl;
     moment.tz.setDefault(MAIN_CONFIG.defaultTimezone);
 
     (this.express).use(helmet());
-    (this.express).use(express.static("public"));
+    //(this.express).use(express.static("public"));
     (this.express).use(bodyParser.urlencoded({ limit: "5mb", extended: false })); // parse application/x-www-form-urlencoded
     (this.express).use(bodyParser.text({ type: "application/json" })); // parse application/json
     //(this.express).use(bodyParser.json());
@@ -44,11 +46,6 @@ class App {
     });
 
     this.mountRoutes();
-    this.checkCache();
-
-    setInterval(() => {
-      this.checkCache();
-    }, (1 * (60 * 1000))); // 1 minute
   }
 
 
@@ -73,17 +70,27 @@ class App {
       }
     }
 
-    (this.express).use(MAIN_CONFIG.baseurl, this.router);
+    (this.express).use(this.baseUrl, this.router);
   }
 
 
-  private checkCache(): void {
-    const currentDate = moment().format("DD.MM.YYYY");
+  // runs from server.ts (this makes sure everything else has be run before running cache checks)
+  public initCacheChecking(): void {
+    this.checkCache();
 
-    if(this.lastCacheUpdate !== currentDate) {
-      console.log(`Cache updating (${currentDate})...`);
+    setInterval(() => {
+      this.checkCache();
+    }, (1 * (60 * 1000))); // 1 minute
+  }
+
+  private checkCache(): void {
+    const currentMoment = moment();
+    const currentTimestamp = currentMoment.unix();
+
+    if((this.lastCacheUpdate + MAIN_CONFIG.cacheCheckInterval) <= currentTimestamp) {
+      console.log(`\nCache updating (${currentMoment.format("HH:mm:ss DD.MM.YYYY")})...`);
       Parser.parse().then((data) => {
-        this.lastCacheUpdate = currentDate;
+        this.lastCacheUpdate = currentTimestamp;
         this.updateCache(data);
       }).catch((err) => {
         console.warn(err);

@@ -1,6 +1,10 @@
 import { ExpressResponse } from "../config/Interfaces";
 
 export class Functions {
+  static logCallback(err: any) {
+    if(err) console.warn(err);
+  }
+
   static sendJSON(res: ExpressResponse, objectToSend: any): void {
     try {
       const jsonToSend = JSON.stringify(objectToSend);

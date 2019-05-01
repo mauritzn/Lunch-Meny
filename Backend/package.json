@@ -31,7 +31,8 @@
     "helmet": "^3.16.0",
     "iconv-lite": "^0.4.24",
     "moment-timezone": "^0.5.25",
-    "nedb": "^1.8.0"
+    "nedb": "^1.8.0",
+    "ua-parser-js": "^0.7.19"
   },
   "devDependencies": {
     "@types/app-root-path": "^1.2.4",
@@ -43,6 +44,7 @@
     "@types/moment-timezone": "^0.5.12",
     "@types/nedb": "^1.8.7",
     "@types/node": "^11.13.8",
+    "@types/ua-parser-js": "^0.7.33",
     "ts-node": "^8.1.0",
     "typescript": "^3.4.5"
   }

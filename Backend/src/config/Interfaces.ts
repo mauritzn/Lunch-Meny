@@ -1,5 +1,6 @@
 export interface ExpressRequest extends Request {
   body: any;
+  headers: any;
   [key: string]: any;
 }
 

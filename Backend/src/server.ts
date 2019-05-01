@@ -4,6 +4,7 @@ import app from "./App";
 
 (app.express).listen(app.port, (err: any) => {
   if(err) throw err;
+  console.log(`Server is listening on ${app.port}`)
 
-  return console.log(`\nserver is listening on ${app.port}`);
+  return app.initCacheChecking();
 });
