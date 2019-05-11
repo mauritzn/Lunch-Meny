@@ -71,6 +71,16 @@ export class Functions {
     }
   }
 
+  static htmlToPlaintext(html: string): string {
+    let plaintext = html.replace(/<(p|ul|br).*?>/gi, ""); // remove new line causing tag's starting tag
+    plaintext = plaintext.replace(/<(li).*?>/gi, "- "); // add "- " in front of list item
+    plaintext = plaintext.replace(/<[/]?(b|i|span|strong|em|a).*?>/gi, ""); // remove inline tags
+    plaintext = plaintext.replace(/<[/](p|ul|li|br).*?>/gi, "\n"); // replace new line causing tags with new lines
+    plaintext = plaintext.replace(/[\n]*$/gi, ""); // remove potential line breaks at the end of the text
+    plaintext = plaintext.replace(/<[/]?.*?>/gi, ""); // final replace to make sure NO html is present
+    return plaintext;
+  }
+
 
   static hash(toHash: string, hashAlgo: string = "sha256") {
     if((supportedHashAlgos).indexOf(hashAlgo) < 0) {

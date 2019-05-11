@@ -15,11 +15,18 @@ export default new Endpoint({
       const date = Funcs.cleanString(req.params.date).replace(/[^.0-9]/gi, ""); // remove whitespace and remove everything that is not a number or a dot
 
       if(new RegExp("^[0-9]{2}[.][0-9]{2}[.][0-9]{4}$", "i").test(date)) {
+        let plainMode = false;
         const uaParser = new UAParser(req.headers["user-agent"]);
         const requestsDb = new Datastore({
           filename: MAIN_CONFIG.requestsFile,
           autoload: true
         });
+
+        if(req.query.plain) {
+          if(["1", "true"].indexOf(req.query.plain) >= 0) {
+            plainMode = true;
+          }
+        }
 
         cacheDb.loadDatabase((loadErr) => {
           if(loadErr) {
@@ -38,6 +45,14 @@ export default new Endpoint({
                 });
               } else {
                 if(found) {
+                  if(plainMode) {
+                    found.restaurants = found.restaurants.map((restaurant: any) => {
+                      restaurant.info = Funcs.htmlToPlaintext(restaurant.info);
+                      restaurant.menu = Funcs.htmlToPlaintext(restaurant.menu);
+                      return restaurant;
+                    });
+                  }
+
                   Funcs.sendJSON(res, {
                     status: 200,
                     message: `Success!`,

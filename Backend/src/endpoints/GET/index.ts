@@ -12,11 +12,18 @@ const cacheDb = new Datastore({
 export default new Endpoint({
   path: "/",
   method: (req, res) => {
+    let plainMode = false;
     const uaParser = new UAParser(req.headers["user-agent"]);
     const requestsDb = new Datastore({
       filename: MAIN_CONFIG.requestsFile,
       autoload: true
     });
+
+    if(req.query.plain) {
+      if(["1", "true"].indexOf(req.query.plain) >= 0) {
+        plainMode = true;
+      }
+    }
 
     cacheDb.loadDatabase((loadErr) => {
       if(loadErr) {
@@ -35,10 +42,19 @@ export default new Endpoint({
             });
           } else {
             if(found && found.length > 0) {
+              let foundCache: ParseResult = found[0];
+              if(plainMode) {
+                foundCache.restaurants = foundCache.restaurants.map((restaurant) => {
+                  restaurant.info = Funcs.htmlToPlaintext(restaurant.info);
+                  restaurant.menu = Funcs.htmlToPlaintext(restaurant.menu);
+                  return restaurant;
+                });
+              }
+
               Funcs.sendJSON(res, {
                 status: 200,
                 message: `Success!`,
-                cache: found[0]
+                cache: foundCache
               });
               requestsDb.insert({
                 endpoint: req.route.path,
@@ -48,6 +64,14 @@ export default new Endpoint({
               }, Funcs.logCallback);
             } else {
               Parser.parse().then((data: ParseResult) => {
+                if(plainMode) {
+                  data.restaurants = data.restaurants.map((restaurant) => {
+                    restaurant.info = Funcs.htmlToPlaintext(restaurant.info);
+                    restaurant.menu = Funcs.htmlToPlaintext(restaurant.menu);
+                    return restaurant;
+                  });
+                }
+
                 Funcs.sendJSON(res, {
                   status: 200,
                   message: `Success! Grabbed fresh cache!`,
