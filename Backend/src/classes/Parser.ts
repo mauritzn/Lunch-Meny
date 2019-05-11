@@ -168,7 +168,7 @@ export class Parser {
             const listTitles = ["Förrätter", "Varmrätter", "Desserter", "VECKANS SALLAD", "VECKANS VARMA"];
             const listSubtitles = ["Dagens", "Veckans", "Sallad", "Soppa", "Vegetarisk"];
             restaurant.menu = restaurant.menu.replace(new RegExp(`<li>((?:${listSubtitles.join("|")})[^<]{0,})[:;][ ]*`, "gi"), "<li><strong>$1:</strong> ");
-            restaurant.menu = restaurant.menu.replace(new RegExp(`<li>(${listTitles.join("|")})<[/]li>`, "gi"), (match, group) => {
+            restaurant.menu = restaurant.menu.replace(new RegExp(`<li>(${listTitles.join("|")})[: ]*<[/]li>`, "gi"), (match, group) => {
               return `<li class="list__title">${Funcs.capitalizeFirstLetter(group.toLowerCase())}</li>`;
             });
           }
