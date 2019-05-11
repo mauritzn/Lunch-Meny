@@ -1,13 +1,9 @@
 import * as Datastore from "nedb";
-import * as moment from "moment-timezone";
 import { UAParser } from "ua-parser-js";
 import Endpoint from "../../classes/Endpoint";
 import { Functions as Funcs } from "../../classes/Functions";
 import MAIN_CONFIG from "../../config/Main";
 import { Parser, ParseResult } from "../../classes/Parser";
-
-moment.tz.setDefault(MAIN_CONFIG.defaultTimezone);
-moment.locale("sv");
 
 const cacheDb = new Datastore({
   filename: MAIN_CONFIG.cacheFile
@@ -31,19 +27,18 @@ export default new Endpoint({
           message: `Kunde inte ladda in database! Vänligen försök igen senare`
         });
       } else {
-        const currentTimestamp = moment(moment().format("DD.MM.YYYY"), "DD.MM.YYYY").unix();
-        cacheDb.findOne({ timestamp: { $gte: currentTimestamp } }, { _id: 0, __v: 0 }, (findErr, found: any) => {
+        cacheDb.find({}, { _id: 0, __v: 0 }).sort({ timestamp: -1 }).limit(1).exec((findErr, found: any) => {
           if(findErr) {
             Funcs.sendJSON(res, {
               status: 500,
               message: `Kunde inte hämta senast cache! Vänligen försök igen senare`
             });
           } else {
-            if(found) {
+            if(found && found.length > 0) {
               Funcs.sendJSON(res, {
                 status: 200,
                 message: `Success!`,
-                cache: found
+                cache: found[0]
               });
               requestsDb.insert({
                 endpoint: req.route.path,

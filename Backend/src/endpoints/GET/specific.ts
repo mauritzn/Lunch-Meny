@@ -1,12 +1,8 @@
 import * as Datastore from "nedb";
-import * as moment from "moment-timezone";
 import { UAParser } from "ua-parser-js";
 import Endpoint from "../../classes/Endpoint";
 import { Functions as Funcs } from "../../classes/Functions";
 import MAIN_CONFIG from "../../config/Main";
-
-moment.tz.setDefault(MAIN_CONFIG.defaultTimezone);
-moment.locale("sv");
 
 const cacheDb = new Datastore({
   filename: MAIN_CONFIG.cacheFile
