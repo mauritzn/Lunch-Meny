@@ -27,7 +27,7 @@ class App {
     moment.tz.setDefault(MAIN_CONFIG.defaultTimezone);
 
     (this.express).use(helmet());
-    //(this.express).use(express.static("public"));
+    (this.express).use(express.static("public"));
     (this.express).use(bodyParser.urlencoded({ limit: "5mb", extended: false })); // parse application/x-www-form-urlencoded
     (this.express).use(bodyParser.text({ type: "application/json" })); // parse application/json
     //(this.express).use(bodyParser.json());

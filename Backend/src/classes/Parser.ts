@@ -1,6 +1,7 @@
 import * as cheerio from "cheerio";
 import * as moment from "moment-timezone";
 import * as iconv from "iconv-lite";
+import * as Jimp from "jimp";
 import axios from "axios";
 import Autolinker from "autolinker";
 import { PhoneNumberFormat, PhoneNumberUtil } from "google-libphonenumber";
@@ -58,6 +59,28 @@ export class Parser {
       }).catch((err) => {
         console.warn(err);
         reject(new Error("Failed to fetch data!"));
+      });
+    });
+  }
+
+  static fetchImages(parseResult: ParseResult) {
+    return new Promise((resolve: (value: ParseResult) => void, reject) => {
+      let newRestaurants = parseResult.restaurants.map(async (restaurant) => {
+        if(restaurant.image) {
+          await Jimp.read(restaurant.image).then((image) => {
+            image.write(`${MAIN_CONFIG.imageFolder}/${restaurant.id}.png`);
+            restaurant.image = `${MAIN_CONFIG.apiUrl}/images/${restaurant.id}.png`;
+          }).catch((err) => {
+            console.warn(err);
+          });
+        }
+
+        return restaurant;
+      });
+
+      Promise.all(newRestaurants).then((restaurants) => {
+        parseResult.restaurants = restaurants;
+        resolve(parseResult);
       });
     });
   }
@@ -158,7 +181,11 @@ export class Parser {
           result.restaurants.push(restaurant);
         });
 
-        resolve(result);
+        Parser.fetchImages(result).then((newResult) => {
+          resolve(newResult);
+        }).catch((err) => {
+          reject(err);
+        });
       }).catch((err) => {
         reject(err);
       });
