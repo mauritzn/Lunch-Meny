@@ -5,15 +5,15 @@
   "main": "src/server.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc",
+    "build": "npx tsc",
     "monit": "pm2 monit",
-    "start": "tsc && pm2 start dist/server.js --name \"lunch_meny_backend\"",
+    "start": "npm run build && pm2 start dist/server.js --name \"lunch_meny_backend\"",
     "stop": "pm2 stop dist/server.js --name \"lunch_meny_backend\" --watch",
-    "dev": "nodemon"
+    "dev": "npx nodemon"
   },
   "nodemonConfig": {
     "execMap": {
-      "ts": "ts-node"
+      "ts": "npx ts-node"
     }
   },
   "author": "MauritzOnline",
@@ -46,6 +46,7 @@
     "@types/nedb": "^1.8.7",
     "@types/node": "^11.13.8",
     "@types/ua-parser-js": "^0.7.33",
+    "nodemon": "^1.19.0",
     "ts-node": "^8.1.0",
     "typescript": "^3.4.5"
   }
