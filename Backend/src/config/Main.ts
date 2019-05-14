@@ -8,7 +8,7 @@ class Main {
   readonly defaultTimezone = "Europe/Helsinki";
 
   readonly appRoot = appRoot;
-  readonly cacheCheckInterval = (5 * 3600); // hours * seconds
+  readonly cacheCheckInterval = "30 */5 * * *"; // cron string (at minute 30 past every 5th hour)
   readonly cacheFile = `${appRoot}/dbs/cache.db`;
   readonly requestsFile = `${appRoot}/dbs/requests.db`; // used for logging requests
   readonly imageFolder = `${appRoot}/public/images`;

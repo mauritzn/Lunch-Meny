@@ -46,6 +46,10 @@ export class Functions {
     }
   }
 
+  static msToSecs(ms: number): number {
+    return Math.floor(ms / 1000);
+  }
+
 
   static capitalizeFirstLetter(text: string): string {
     return text.charAt(0).toUpperCase() + text.slice(1);
