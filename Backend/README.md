@@ -4,7 +4,8 @@ Node.js web parser som skaffar lunch information från http://www.aland.com/lunc
 
 Cachen uppdateras enligt följande cron pattern: `30 */5 * * *` *(at minute 30 past every 5th hour, [Crontab Guru](https://crontab.guru/#30_*/5_*_*_*))*
 
-**API dokumentation:** https://documenter.getpostman.com/view/4342024/S1LzwRwv?version=latest
+**API dokumentation:** https://documenter.getpostman.com/view/4342024/S1LzwRwv?version=latest<br/>
+**API länk:** https://mauritz.cloud/lunch-meny *(APIn är öppen och får gärna användas för att skapa andra frontends)*
 
 ---
 
