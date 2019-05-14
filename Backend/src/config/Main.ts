@@ -9,8 +9,7 @@ class Main {
 
   readonly appRoot = appRoot;
   readonly cacheCheckInterval = "30 */5 * * *"; // cron string (at minute 30 past every 5th hour)
-  readonly cacheFile = `${appRoot}/dbs/cache.db`;
-  readonly requestsFile = `${appRoot}/dbs/requests.db`; // used for logging requests
+  readonly dbFolder = `${appRoot}/dbs`;
   readonly imageFolder = `${appRoot}/public/images`;
   readonly runningAsTypeScript = new RegExp("[.]ts$").test((require.main ? require.main.filename : ""));
   readonly apiUrl = (this.runningAsTypeScript ? `http://127.0.0.1:${this.port}` : `https://mauritz.cloud/lunch-meny`);

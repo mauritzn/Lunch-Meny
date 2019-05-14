@@ -1,12 +1,11 @@
-import * as Datastore from "nedb";
 import * as cronParser from "cron-parser";
 import * as moment from "moment-timezone";
 import MAIN_CONFIG from "../config/Main";
 import { Parser, ParseResult } from "../classes/Parser";
 import { Functions as Funcs } from "../classes/Functions";
+import cacheDb from "../classes/CacheDb";
 
 export default class CacheManager {
-  private cacheDb: Nedb;
   private cacheInterval: any;
   private cronString: string;
   private timezone: string;
@@ -16,11 +15,6 @@ export default class CacheManager {
     this.cronString = Funcs.cleanString(cronString);
     this.timezone = Funcs.cleanString(timezone);
     moment.tz.setDefault(MAIN_CONFIG.defaultTimezone);
-
-    this.cacheDb = new Datastore({
-      filename: MAIN_CONFIG.cacheFile,
-      autoload: true
-    });
 
     this.cacheInterval = cronParser.parseExpression(this.cronString, {
       tz: this.timezone
@@ -55,11 +49,11 @@ export default class CacheManager {
   }
 
   private updateCache(data: ParseResult): void {
-    this.cacheDb.findOne({ date: data.date }, { _id: 0, __v: 0 }, (findErr, found) => {
+    cacheDb.findOne({ date: data.date }, { _id: 0, __v: 0 }, (findErr, found) => {
       if(findErr) throw findErr;
 
       if(!found) {
-        this.cacheDb.insert(data, (insertErr) => {
+        cacheDb.insert(data, (insertErr) => {
           if(insertErr) throw insertErr;
           console.log(`Added ${data.date} to cache!`);
         });
@@ -77,7 +71,7 @@ export default class CacheManager {
         }
 
         if(cacheMismatch) {
-          this.cacheDb.update({ date: data.date }, {
+          cacheDb.update({ date: data.date }, {
             $set: data
           }, { multi: false }, (updateErr) => {
             if(updateErr) {
@@ -85,7 +79,7 @@ export default class CacheManager {
               console.log(`Failed to update existing cache for date: ${data.date}!`);
             } else {
               console.log(`Updated existing cache for date: ${data.date}!`);
-              this.cacheDb.persistence.compactDatafile();
+              cacheDb.persistence.compactDatafile();
             }
           });
         } else {

@@ -1,12 +1,8 @@
-import * as Datastore from "nedb";
 import { UAParser } from "ua-parser-js";
 import Endpoint from "../../classes/Endpoint";
 import { Functions as Funcs } from "../../classes/Functions";
-import MAIN_CONFIG from "../../config/Main";
-
-const cacheDb = new Datastore({
-  filename: MAIN_CONFIG.cacheFile
-});
+import cacheDb from "../../classes/CacheDb";
+import requestsDb from "../../classes/RequestsDb";
 
 export default new Endpoint({
   path: "/:date",
@@ -17,10 +13,6 @@ export default new Endpoint({
       if(new RegExp("^[0-9]{2}[.][0-9]{2}[.][0-9]{4}$", "i").test(date)) {
         let plainMode = false;
         const uaParser = new UAParser(req.headers["user-agent"]);
-        const requestsDb = new Datastore({
-          filename: MAIN_CONFIG.requestsFile,
-          autoload: true
-        });
 
         if(req.query.plain) {
           if(["1", "true"].indexOf(req.query.plain) >= 0) {
@@ -28,51 +20,40 @@ export default new Endpoint({
           }
         }
 
-        cacheDb.loadDatabase((loadErr) => {
-          if(loadErr) {
-            console.warn(loadErr);
-
+        cacheDb.findOne({ date: date }, { _id: 0, __v: 0 }, (findErr, found: any) => {
+          if(findErr) {
             Funcs.sendJSON(res, {
               status: 500,
-              message: `Kunde inte ladda in database! Vänligen försök igen senare`
+              message: `Kunde inte hämta cache för datumet! Vänligen försök igen senare`
             });
           } else {
-            cacheDb.findOne({ date: date }, { _id: 0, __v: 0 }, (findErr, found: any) => {
-              if(findErr) {
-                Funcs.sendJSON(res, {
-                  status: 500,
-                  message: `Kunde inte hämta cache för datumet! Vänligen försök igen senare`
+            if(found) {
+              if(plainMode) {
+                found.restaurants = found.restaurants.map((restaurant: any) => {
+                  restaurant.info = Funcs.htmlToPlaintext(restaurant.info);
+                  restaurant.menu = Funcs.htmlToPlaintext(restaurant.menu);
+                  return restaurant;
                 });
-              } else {
-                if(found) {
-                  if(plainMode) {
-                    found.restaurants = found.restaurants.map((restaurant: any) => {
-                      restaurant.info = Funcs.htmlToPlaintext(restaurant.info);
-                      restaurant.menu = Funcs.htmlToPlaintext(restaurant.menu);
-                      return restaurant;
-                    });
-                  }
-
-                  Funcs.sendJSON(res, {
-                    status: 200,
-                    message: `Success!`,
-                    cache: found
-                  });
-                  requestsDb.insert({
-                    endpoint: req.route.path,
-                    message: `Client successfully grabbed a copy of cached data for specific date`,
-                    lunchDate: date,
-                    client: uaParser.getResult(),
-                    time: new Date()
-                  }, Funcs.logCallback);
-                } else {
-                  Funcs.sendJSON(res, {
-                    status: 404,
-                    message: `Ingen lunch information kunde hittas för datumet: ${date}`
-                  });
-                }
               }
-            });
+
+              Funcs.sendJSON(res, {
+                status: 200,
+                message: `Success!`,
+                cache: found
+              });
+              requestsDb.insert({
+                endpoint: req.route.path,
+                message: `Client successfully grabbed a copy of cached data for specific date`,
+                lunchDate: date,
+                client: uaParser.getResult(),
+                time: new Date()
+              }, Funcs.logCallback);
+            } else {
+              Funcs.sendJSON(res, {
+                status: 404,
+                message: `Ingen lunch information kunde hittas för datumet: ${date}`
+              });
+            }
           }
         });
       } else {
