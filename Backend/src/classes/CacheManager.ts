@@ -50,7 +50,7 @@ export default class CacheManager {
         console.warn(err);
       });
     } else {
-      console.log(`Cache is up-to-date. Next cache date is: "${this.cacheInterval._currentDate.toString()}"`);
+      console.log(`Next cache check date is: "${this.cacheInterval._currentDate.toString()}"`);
     }
   }
 
