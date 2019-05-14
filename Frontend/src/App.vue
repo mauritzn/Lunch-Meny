@@ -40,7 +40,7 @@
         </p>
         <p>
           <strong>Källkod:&nbsp;</strong>
-          <a href="https://github.com/mauritzn/Lunch-Meny/tree/v0.1.0" target="_blank">GitHub</a>
+          <a href="https://github.com/mauritzn/Lunch-Meny" target="_blank">GitHub</a>
           |
           <a href="https://mauritz.cloud/lunch-meny" target="_blank">API</a>
         </p>
