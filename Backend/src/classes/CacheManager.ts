@@ -1,9 +1,9 @@
 import * as cronParser from "cron-parser";
 import * as moment from "moment-timezone";
 import MAIN_CONFIG from "../config/Main";
-import { Parser, ParseResult } from "../classes/Parser";
-import { Functions as Funcs } from "../classes/Functions";
-import cacheDb from "../classes/CacheDb";
+import { Parser, ParseResult } from "./Parser";
+import { Functions as Funcs } from "./Functions";
+import cacheDb from "./CacheDb";
 
 export default class CacheManager {
   private cacheInterval: any;

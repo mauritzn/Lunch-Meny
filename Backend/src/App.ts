@@ -2,6 +2,7 @@ import * as express from "express";
 import * as cors from "cors";
 import * as helmet from "helmet";
 import * as bodyParser from "body-parser";
+import * as bearerToken from "express-bearer-token";
 import allEndpoints from "./endpoints/core";
 import MAIN_CONFIG from "./config/Main";
 import { ExpressRequest, ExpressResponse } from "./config/Interfaces";
@@ -20,16 +21,16 @@ class App {
 
     (this.express).use(helmet());
     (this.express).use(express.static("public"));
-    (this.express).use(bodyParser.urlencoded({ limit: "5mb", extended: false })); // parse application/x-www-form-urlencoded
+    //(this.express).use(bodyParser.urlencoded({ limit: "5mb", extended: false })); // parse application/x-www-form-urlencoded
     (this.express).use(bodyParser.text({ type: "application/json" })); // parse application/json
     //(this.express).use(bodyParser.json());
+    (this.express).use(bearerToken()); // parse Authorization: Bearer <token>
 
     (this.express).use(cors({
       origin: "*",
       methods: MAIN_CONFIG.allowedEndpointMethodsBase,
       allowedHeaders: ["X-Requested-With", "Content-Type", "Access-Control-Allow-Headers", "Authorization"],
       credentials: true
-      //res.setHeader("Access-Control-Allow-Credentials", true); || credentials: Configures the Access-Control-Allow-Credentials CORS header. Set to true to pass the header, otherwise it is omitted.
     }));
     (this.express).options("*", cors()); // enable pre-flight across-the-board
 

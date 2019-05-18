@@ -1,3 +1,4 @@
+import "./env";
 import app from "./App";
 import MAIN_CONFIG from "./config/Main";
 import CacheManger from "./classes/CacheManager";
