@@ -10,20 +10,31 @@ export default new Endpoint({
 
     if(token.length > 0) {
       if(apiKeychain.verify(token)) {
-        Funcs.sendJSON(res, {
-          status: 200,
-          message: `success!`
+        requestsDb.find({}, { _id: 0, __v: 0 }).sort({ time: 1 }).exec((findErr, foundRequests) => {
+          if(findErr) {
+            console.warn(findErr);
+            Funcs.sendJSON(res, {
+              status: 500,
+              message: `Kunde inte läsa log DB!`
+            });
+          } else {
+            Funcs.sendJSON(res, {
+              status: 200,
+              message: `Success!`,
+              requests: foundRequests
+            });
+          }
         });
       } else {
         Funcs.sendJSON(res, {
           status: 403,
-          message: `Invalid API Key!`
+          message: `Ogiltig API nyckel!`
         });
       }
     } else {
       Funcs.sendJSON(res, {
         status: 400,
-        message: `An API Key is required!`
+        message: `En API nyckel krävs!`
       });
     }
   }
