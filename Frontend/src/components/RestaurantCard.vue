@@ -3,7 +3,7 @@
     <div class="restaurantCard__header">
       <a :href="(restaurant.website ? restaurant.website : 'javascript:void(0);')" target="_blank">
         <h3>
-          <img :src="restaurant.image" v-if="restaurant.image">
+          <img :src="restaurant.image" v-if="restaurant.image" />
           <span v-else>{{ restaurant.name }}</span>
         </h3>
       </a>
@@ -76,7 +76,7 @@
 
     h3 {
       margin: 0;
-      line-height: 0;
+      line-height: 1em;
       vertical-align: middle;
 
       img {
