@@ -2,6 +2,7 @@ import * as cronParser from "cron-parser";
 import * as moment from "moment-timezone";
 import MAIN_CONFIG from "../config/Main";
 import { Parser, ParseResult } from "./Parser";
+import { SeasideParser, Restaurant } from "./SeasideParser";
 import { Functions as Funcs } from "./Functions";
 import cacheDb from "./CacheDb";
 
@@ -38,8 +39,16 @@ export default class CacheManager {
       }
 
       Parser.parse().then((data) => {
-        this.cacheInterval.next();
-        this.updateCache(data);
+        SeasideParser.parse(data.week_number, data.day).then((restaurantData) => {
+          //console.log(restaurantData);
+          data.restaurants.push(restaurantData);
+          this.cacheInterval.next();
+          this.updateCache(data);
+        }).catch((err) => {
+          console.warn(err);
+          this.cacheInterval.next();
+          this.updateCache(data);
+        });
       }).catch((err) => {
         console.warn(err);
       });
