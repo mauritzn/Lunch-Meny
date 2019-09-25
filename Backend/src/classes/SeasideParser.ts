@@ -6,7 +6,6 @@ import axios from "axios";
 import Autolinker from "autolinker";
 import { PhoneNumberFormat, PhoneNumberUtil } from "google-libphonenumber";
 import MAIN_CONFIG from "../config/Main";
-import { Functions as Funcs } from "./Functions";
 
 moment.tz.setDefault(MAIN_CONFIG.defaultTimezone);
 moment.locale("sv");
