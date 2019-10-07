@@ -67,10 +67,10 @@ export class Parser {
     return new Promise((resolve: (value: ParseResult) => void, reject) => {
       let newRestaurants = parseResult.restaurants.map(async (restaurant) => {
         if(restaurant.image) {
-          await Jimp.read(restaurant.image).then((image) => {
+          await (Jimp as any).read(restaurant.image).then((image: any) => {
             image.write(`${MAIN_CONFIG.imageFolder}/${restaurant.id}.png`);
             restaurant.image = `${MAIN_CONFIG.apiUrl}/images/${restaurant.id}.png`;
-          }).catch((err) => {
+          }).catch((err: any) => {
             console.warn(err);
           });
         }
