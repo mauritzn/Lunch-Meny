@@ -12,6 +12,7 @@ moment.locale("sv");
 
 const allowedDays: string[] = ["måndag", "tisdag", "onsdag", "torsdag", "fredag", "lördag", "söndag"];
 const dayKeys: string[] = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
+const weekNumberRegEx = new RegExp("[/]content[/]vecka-([0-9]+)", "i");
 export interface Restaurant {
   id: number; // 9001
   image: string; // ""
@@ -86,8 +87,19 @@ export class SeasideParser {
             menu: ""
           };
 
-          let menuContent = $(`div[about="/content/${weekNumber}"]`)
-          if(menuContent.length > 0) {
+          let menuContent = null;
+          $(`div[role="article"].node-meal`).each((i, element) => {
+            const aboutAttr = $(element).attr("about");
+            const match = aboutAttr.match(weekNumberRegEx);
+            if(match && match.length >= 2) {
+              const menuWeekNumber = parseInt(match[1].replace(new RegExp("^[0]+"), ""));
+              if(!isNaN(menuWeekNumber) && menuWeekNumber === weekNumber) {
+                menuContent = element;
+              }
+            }
+          });
+
+          if(menuContent) {
             const fieldName = `field-name-field-meal-${dayKeys[currentDayKey]}`;
             let normalMenu = $(menuContent).find(`section.${fieldName}`);
             let vegetarianMenu = $(menuContent).find(`section.${fieldName}-veg`);
@@ -114,11 +126,11 @@ export class SeasideParser {
           }
 
           if(restaurant.image) {
-            Jimp.read(restaurant.image).then((image) => {
+            (Jimp as any).read(restaurant.image).then((image: any) => {
               image.write(`${MAIN_CONFIG.imageFolder}/${restaurant.id}.png`);
               restaurant.image = `${MAIN_CONFIG.apiUrl}/images/${restaurant.id}.png`;
               resolve(restaurant);
-            }).catch((err) => {
+            }).catch((err: any) => {
               console.warn(err);
               resolve(restaurant);
             });
