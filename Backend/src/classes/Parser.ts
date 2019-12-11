@@ -141,44 +141,49 @@ export class Parser {
           const image = ($(element).find(".ui-accordion-content .restaurant_info > img").attr("src") || "").trim(); // get restaurant image
           $(element).find(".ui-accordion-content .restaurant_info > img").remove(); // remove logo from resturant info
 
-          let restaurant: Restaurant = {
-            id: parseInt($(element).attr("id").replace(/[^0-9]/gi, "")),
-            image: image,
-            website: website,
-            name: ($(element).find(".ui-accordion-header .header_left").text() || "").trim(),
-            info: ($(element).find(".ui-accordion-content .restaurant_info").html() || "").trim(),
-            address: (splitInfo[0] || "").trim(),
-            phone: (splitInfo[1] || "").trim(),
-            menu: ($(element).find(".ui-accordion-content .restaurant_menu").html() || "").trim()
-          };
+          let restaurantId = $(element).attr("id");
+          restaurantId = (restaurantId ? restaurantId.replace(/[^0-9]/gi, "") : undefined);
 
-          if(restaurant.info) {
-            restaurant.info = formatHtml(restaurant.info);
-            restaurant.info = Autolinker.link(restaurant.info); // find links/emails/etc.
+          if(restaurantId) {
+            let restaurant: Restaurant = {
+              id: parseInt(restaurantId),
+              image: image,
+              website: website,
+              name: ($(element).find(".ui-accordion-header .header_left").text() || "").trim(),
+              info: ($(element).find(".ui-accordion-content .restaurant_info").html() || "").trim(),
+              address: (splitInfo[0] || "").trim(),
+              phone: (splitInfo[1] || "").trim(),
+              menu: ($(element).find(".ui-accordion-content .restaurant_menu").html() || "").trim()
+            };
+
+            if(restaurant.info) {
+              restaurant.info = formatHtml(restaurant.info);
+              restaurant.info = Autolinker.link(restaurant.info); // find links/emails/etc.
+            }
+            if(restaurant.menu) {
+              restaurant.menu = formatHtml(restaurant.menu);
+              restaurant.menu = restaurant.menu.replace(/\n$/i, ""); // remove unwated trailing newline
+
+              // add extra elements, for better style hierarchy
+              restaurant.menu = restaurant.menu.replace(new RegExp("<ul><li>STÅENDE MENY<[/]li>", "i"), "<p><strong>Stående meny</strong></p><ul>");
+              restaurant.menu = restaurant.menu.replace(new RegExp("<li>VECKANS MENY<[/]li>", "i"), "</ul><p><strong>Veckans meny</strong></p><ul>");
+              restaurant.menu = restaurant.menu.replace(new RegExp("<li>Lunchmeny<[/]li>", "i"), "");
+
+              const listTitles = ["Förrätter", "Varmrätter", "Desserter", "VECKANS SALLAD", "VECKANS VARMA"];
+              const listSubtitles = ["Dagens", "Veckans", "Sallad", "Soppa", "Vegetarisk"];
+              restaurant.menu = restaurant.menu.replace(new RegExp(`<li>((?:${listSubtitles.join("|")})[^<]{0,})[:;][ ]*`, "gi"), "<li><strong>$1:</strong> ");
+              restaurant.menu = restaurant.menu.replace(new RegExp(`<li>(${listTitles.join("|")})[: ]*<[/]li>`, "gi"), (match, group) => {
+                return `<li class="list__title">${Funcs.capitalizeFirstLetter(group.toLowerCase())}</li>`;
+              });
+            }
+
+            if(restaurant.phone) { // if a phone number exists convert it to a consistent local format
+              const number = phoneUtil.parseAndKeepRawInput(restaurant.phone, "FI");
+              restaurant.phone = phoneUtil.format(number, PhoneNumberFormat.NATIONAL);
+            }
+
+            result.restaurants.push(restaurant);
           }
-          if(restaurant.menu) {
-            restaurant.menu = formatHtml(restaurant.menu);
-            restaurant.menu = restaurant.menu.replace(/\n$/i, ""); // remove unwated trailing newline
-
-            // add extra elements, for better style hierarchy
-            restaurant.menu = restaurant.menu.replace(new RegExp("<ul><li>STÅENDE MENY<[/]li>", "i"), "<p><strong>Stående meny</strong></p><ul>");
-            restaurant.menu = restaurant.menu.replace(new RegExp("<li>VECKANS MENY<[/]li>", "i"), "</ul><p><strong>Veckans meny</strong></p><ul>");
-            restaurant.menu = restaurant.menu.replace(new RegExp("<li>Lunchmeny<[/]li>", "i"), "");
-
-            const listTitles = ["Förrätter", "Varmrätter", "Desserter", "VECKANS SALLAD", "VECKANS VARMA"];
-            const listSubtitles = ["Dagens", "Veckans", "Sallad", "Soppa", "Vegetarisk"];
-            restaurant.menu = restaurant.menu.replace(new RegExp(`<li>((?:${listSubtitles.join("|")})[^<]{0,})[:;][ ]*`, "gi"), "<li><strong>$1:</strong> ");
-            restaurant.menu = restaurant.menu.replace(new RegExp(`<li>(${listTitles.join("|")})[: ]*<[/]li>`, "gi"), (match, group) => {
-              return `<li class="list__title">${Funcs.capitalizeFirstLetter(group.toLowerCase())}</li>`;
-            });
-          }
-
-          if(restaurant.phone) { // if a phone number exists convert it to a consistent local format
-            const number = phoneUtil.parseAndKeepRawInput(restaurant.phone, "FI");
-            restaurant.phone = phoneUtil.format(number, PhoneNumberFormat.NATIONAL);
-          }
-
-          result.restaurants.push(restaurant);
         });
 
         Parser.fetchImages(result).then((newResult) => {

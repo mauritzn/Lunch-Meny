@@ -12,7 +12,7 @@ moment.locale("sv");
 
 const allowedDays: string[] = ["måndag", "tisdag", "onsdag", "torsdag", "fredag", "lördag", "söndag"];
 const dayKeys: string[] = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
-const weekNumberRegEx = new RegExp("[/]content[/]vecka-([0-9]+)", "i");
+const weekNumberRegEx = new RegExp("[/]content[/](?:v|vecka)?-?([0-9]+)", "i");
 export interface Restaurant {
   id: number; // 9001
   image: string; // ""
@@ -90,11 +90,13 @@ export class SeasideParser {
           let menuContent = null;
           $(`div[role="article"].node-meal`).each((i, element) => {
             const aboutAttr = $(element).attr("about");
-            const match = aboutAttr.match(weekNumberRegEx);
-            if(match && match.length >= 2) {
-              const menuWeekNumber = parseInt(match[1].replace(new RegExp("^[0]+"), ""));
-              if(!isNaN(menuWeekNumber) && menuWeekNumber === weekNumber) {
-                menuContent = element;
+            if(aboutAttr) {
+              const match = aboutAttr.match(weekNumberRegEx);
+              if(match && match.length >= 2) {
+                const menuWeekNumber = parseInt(match[1].replace(new RegExp("^[0]+"), ""));
+                if(!isNaN(menuWeekNumber) && menuWeekNumber === weekNumber) {
+                  menuContent = element;
+                }
               }
             }
           });
@@ -113,7 +115,7 @@ export class SeasideParser {
             }
             restaurant.menu += `</ul>`;
           } else {
-            reject(new Error("No menu found for this week!"));
+            reject(new Error("No Seaside menu found for this week!"));
           }
 
           if(restaurant.info) {
