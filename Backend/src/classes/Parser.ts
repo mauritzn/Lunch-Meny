@@ -178,8 +178,21 @@ export class Parser {
             }
 
             if(restaurant.phone) { // if a phone number exists convert it to a consistent local format
-              const number = phoneUtil.parseAndKeepRawInput(restaurant.phone, "FI");
-              restaurant.phone = phoneUtil.format(number, PhoneNumberFormat.NATIONAL);
+              try {
+                const numbers = restaurant.phone.split("/");
+                const formattedNumbers = numbers.map((number) => {
+                  const parsedNumber = phoneUtil.parseAndKeepRawInput(number.trim(), "FI");
+                  return phoneUtil.format(parsedNumber, PhoneNumberFormat.NATIONAL);
+                });
+
+                restaurant.phone = formattedNumbers.join(", ");
+              } catch(err) {
+                console.log("");
+                console.log(">> Phone number error <<");
+                console.warn(err);
+                console.log(">", restaurant.name, "|", restaurant.phone);
+                console.log("");
+              }
             }
 
             result.restaurants.push(restaurant);
