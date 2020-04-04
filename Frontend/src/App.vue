@@ -14,6 +14,9 @@
 
       <p v-if="loading">Laddar...</p>
       <p v-else-if="!loading && errored">Något gick fel! Vänligen försök igen senare</p>
+      <p
+        v-else-if="!loading && !errored && restaurants.length <= 0"
+      >Ingen lunch meny kunde hittas för idag.</p>
       <div v-else>
         <restaurant-card
           v-for="restaurant in favoritedRestaurants"
@@ -21,7 +24,7 @@
           :restaurant="restaurant"
         ></restaurant-card>
 
-        <hr v-if="favoritedRestaurants.length > 0 && unfavoritedRestaurants.length > 0">
+        <hr v-if="favoritedRestaurants.length > 0 && unfavoritedRestaurants.length > 0" />
 
         <restaurant-card
           v-for="restaurant in unfavoritedRestaurants"
