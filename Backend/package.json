@@ -22,7 +22,7 @@
   "private": true,
   "dependencies": {
     "app-root-path": "^3.0.0",
-    "autolinker": "^3.13.0",
+    "autolinker": "^3.14.0",
     "axios": "^0.19.2",
     "body-parser": "^1.19.0",
     "cheerio": "^1.0.0-rc.3",
