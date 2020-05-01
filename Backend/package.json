@@ -40,7 +40,6 @@
     "jimp": "^0.10.3",
     "moment-timezone": "^0.5.28",
     "nedb": "^1.8.0",
-    "snyk": "^1.316.1",
     "ua-parser-js": "^0.7.21"
   },
   "devDependencies": {
@@ -56,6 +55,7 @@
     "@types/node": "^13.13.4",
     "@types/ua-parser-js": "^0.7.33",
     "nodemon": "^2.0.3",
+    "snyk": "^1.316.1",
     "ts-node": "^8.9.1",
     "typescript": "^3.8.3"
   },
