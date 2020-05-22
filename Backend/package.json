@@ -37,7 +37,7 @@
     "google-libphonenumber": "^3.2.9",
     "helmet": "^3.22.0",
     "iconv-lite": "^0.5.1",
-    "jimp": "^0.10.3",
+    "jimp": "^0.12.0",
     "moment-timezone": "^0.5.28",
     "nedb": "^1.8.0",
     "ua-parser-js": "^0.7.21"
